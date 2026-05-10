@@ -10,6 +10,8 @@ Roberto Rigo, Dev, xariote, https://github.com/xariote
 EQUIPE C
 
     Daniela Tamy, Dev, danitamyy, https://github.com/DanielaTamy
-
+    
+    Bruna de Lima, Dev, ibrunny, https://github.com/ibrunny
+    
 EQUIPE D
 Thiago Tanaka Peczek, TL, ttpgamer, https://github.com/Thiago-Peczek
