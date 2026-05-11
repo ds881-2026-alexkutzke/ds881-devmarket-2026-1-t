@@ -14,6 +14,8 @@ EQUIPE B
 
     Felyppe Marcelo da Silva, DEV, lyppe1201, https://github.com/felyppe1201
 
+    Sabrina Dorigoni Pelentir, SM, sadzpea, https://github.com/sabrina-dp
+
 EQUIPE C
 
     Daniela Tamy, Dev, danitamyy, https://github.com/DanielaTamy
