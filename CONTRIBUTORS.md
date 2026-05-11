@@ -7,6 +7,7 @@ nome, papel no projeto (PO, SM, TL ou DEV), usuário no discord e link do perfil
 EQUIPE A
 
     Roberto Rigo, Dev, xariote, https://github.com/xariote
+    Lucas Garzuze Cordeiro, https://github.com/garzuze
 
 EQUIPE B
 
