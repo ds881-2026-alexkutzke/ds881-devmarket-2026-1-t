@@ -23,3 +23,5 @@ EQUIPE D
     Thiago Tanaka Peczek, TL, ttpgamer, https://github.com/Thiago-Peczek
 
     Leticia Sanches, Dev, kthvamp, https://github.com/Lsats
+
+    Paulo Roberto Gomes Barroso Schiochet, Dev, garlicn, https://github.com/pauloschiochetufpr
