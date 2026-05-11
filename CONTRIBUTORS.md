@@ -21,3 +21,5 @@ EQUIPE C
 EQUIPE D
 
     Thiago Tanaka Peczek, TL, ttpgamer, https://github.com/Thiago-Peczek
+
+    Leticia Sanches, Dev, kthvamp, https://github.com/Lsats
