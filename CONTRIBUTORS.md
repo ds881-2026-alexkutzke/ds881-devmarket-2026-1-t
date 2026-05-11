@@ -12,6 +12,8 @@ EQUIPE B
 
     Pedro Novak Wosch, Dev, Kaironst, https://github.com/Kaironst
 
+    Felyppe Marcelo da Silva, DEV, lyppe1201, https://github.com/felyppe1201
+
 EQUIPE C
 
     Daniela Tamy, Dev, danitamyy, https://github.com/DanielaTamy
