@@ -18,6 +18,8 @@ EQUIPE C
 
     Bruna de Lima, Dev, ibrunny, https://github.com/ibrunny
 
+    Henrique Meneses, Dev, z3nrique, https://github.com/z3nrique
+
 EQUIPE D
 
     Thiago Tanaka Peczek, TL, ttpgamer, https://github.com/Thiago-Peczek
