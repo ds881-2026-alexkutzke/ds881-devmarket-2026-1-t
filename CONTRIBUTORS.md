@@ -34,3 +34,5 @@ EQUIPE D
     Leticia Sanches, Dev, kthvamp, https://github.com/Lsats
 
     Paulo Roberto Gomes Barroso Schiochet, Dev, garlicn, https://github.com/pauloschiochetufpr
+
+    Jamily Notario, PO, jamily-not, https://github.com/jamily-not
