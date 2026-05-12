@@ -8,6 +8,7 @@ EQUIPE A
 
     Roberto Rigo, Dev, xariote, https://github.com/xariote
     Lucas Garzuze Cordeiro, https://github.com/garzuze
+    Bruno Pedron Rupaner, Dev, bruno_pedron, https://github.com/bruno-pedron
 
 EQUIPE B
 
