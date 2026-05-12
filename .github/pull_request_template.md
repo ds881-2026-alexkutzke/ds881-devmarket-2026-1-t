@@ -13,3 +13,6 @@ Descreva o que você fez.
 - [ ] Não há `console.log`
 - [ ] Não usei CSS inline
 - [ ] Não fiz nenhuma requisição (fetch ou axios) fora de services/
+- [ ] Componentes usam default export
+- [ ] Services usam named exports (nunca default export)
+- [ ] Sem dependências circulares
