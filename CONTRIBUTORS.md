@@ -25,6 +25,8 @@ EQUIPE C
 
     Henrique Meneses, Dev, z3nrique, https://github.com/z3nrique
 
+    Peterson Fontinhas, TL, pafontinhas, https://github.com/PAFONTINHAS
+
 EQUIPE D
 
     Thiago Tanaka Peczek, TL, ttpgamer, https://github.com/Thiago-Peczek
