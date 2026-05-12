@@ -1,8 +1,18 @@
 ## Descrição
+
 Closes # (insira o número da issue)
 
 ## O que foi feito
-* * ## Checklist
+
+Descreva o que você fez.
+
+## Checklist
+
 - [ ] Testei localmente
 - [ ] O código segue as convenções de arquitetura
 - [ ] Não há `console.log`
+- [ ] Não usei CSS inline
+- [ ] Não fiz nenhuma requisição (fetch ou axios) fora de services/
+- [ ] Componentes usam default export
+- [ ] Services usam named exports (nunca default export)
+- [ ] Sem dependências circulares
