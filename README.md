@@ -11,6 +11,9 @@
 7. Se pedirem mudanças, corrija, commite, e peça review de novo
 8. Quando aprovado e mergeado, mova a issue para “Done”
 
+> [!WARNING]
+> Convenção de branch para adicionar nome ao contributors: docs/contributors-[usuario-github].
+
 
 ## Convenções de Arquitetura
 
