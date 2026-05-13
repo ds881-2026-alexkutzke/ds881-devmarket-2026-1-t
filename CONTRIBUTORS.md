@@ -22,6 +22,8 @@ EQUIPE B
 
     Sabrina Dorigoni Pelentir, SM, sadzpea, https://github.com/sabrina-dp
 
+    Maria Fernanda Zandona Casagrande, DEV, maferzc, https://github.com/fe-fe
+
 EQUIPE C
 
     Bruna de Lima, Dev, ibrunny, https://github.com/ibrunny
@@ -45,4 +47,3 @@ EQUIPE D
     Paulo Roberto Gomes Barroso Schiochet, Dev, garlicn, https://github.com/pauloschiochetufpr
 
     Thiago Tanaka Peczek, TL, ttpgamer, https://github.com/Thiago-Peczek
-
