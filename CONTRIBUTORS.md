@@ -12,6 +12,8 @@ EQUIPE A
 
     Roberto Rigo, Dev, xariote, https://github.com/xariote
 
+    Johnny Labes, PO, johnny_75768, https://github.com/jlabes
+
 EQUIPE B
 
     Clarissa Morita, Dev, cissa, https://github.com/cissamil 
