@@ -18,6 +18,8 @@ EQUIPE B
 
     Sabrina Dorigoni Pelentir, SM, sadzpea, https://github.com/sabrina-dp
 
+    Clarissa Morita, Dev, cissa, https://github.com/cissamil 
+
 EQUIPE C
 
     Daniela Tamy, Dev, danitamyy, https://github.com/DanielaTamy
