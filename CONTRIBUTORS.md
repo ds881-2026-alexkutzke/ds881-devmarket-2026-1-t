@@ -39,3 +39,6 @@ EQUIPE D
     Paulo Roberto Gomes Barroso Schiochet, Dev, garlicn, https://github.com/pauloschiochetufpr
 
     Jamily Notario, PO, jamily-not, https://github.com/jamily-not
+
+    Dyego Dasko, Dev, salazin., https://github.com/Dasko7b
+
