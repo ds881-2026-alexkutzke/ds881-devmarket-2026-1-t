@@ -10,6 +10,8 @@ EQUIPE A
     
     Lucas Garzuze Cordeiro, TL, garzuze, https://github.com/garzuze
 
+    Pedro Eduardo Dall' Agnol, DEV, nero_515., https://github.com/NeroPRDO
+
     Roberto Rigo, Dev, xariote, https://github.com/xariote
 
 EQUIPE B
