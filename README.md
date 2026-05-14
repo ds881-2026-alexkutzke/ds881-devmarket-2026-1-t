@@ -23,6 +23,8 @@
 * `src/services/`: Chamadas a APIs externas (`camelCaseService.ts`). Devem usar named exports.
 * `src/hooks/`: Custom hooks (`usePascalCase.ts` ou `.tsx`).
 * `src/utils/`: Funções utilitárias (`camelCase.ts`).
+* `src/store/`: Estados globais (`camelCaseStore.ts`).
+* `src/tests/`: Testes automatizados (`*.test.ts`).
 * `src/types/`: Tipos TypeScript (`camelCase.types.ts`).
 
 **Regras de Importação:**
@@ -32,5 +34,5 @@
 
 **Qualidade:**
 * Proibido o uso de `console.log`.
-* Proibido CSS inline (use classes do Tailwind).
+* Proibido CSS inline (estilize usando arquivos .css ou .tsx).
 * Componentes não podem fazer chamadas diretas com `fetch()` ou `axios`. Chamadas devem ficar em `services/`.
