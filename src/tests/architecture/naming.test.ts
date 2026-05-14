@@ -30,79 +30,57 @@ function getFiles(dir: string, allFiles: string[] = []): string[] {
 
 const srcPath = path.resolve(__dirname, '../../');
 
+function validateFiles(folder: string, regex: RegExp, errorMessage: string) {
+  const dir = path.join(srcPath, folder);
+  if (!fs.existsSync(dir)) return;
+
+  const files = getFiles(dir).map(f => path.basename(f));
+  files.forEach(file => {
+    expect(file, `${errorMessage}: ${file}`).toMatch(regex);
+  });
+}
+
 describe('Convenções de Nomenclatura de Arquivos', () => {
   
   describe('src/components/', () => {
     test('Arquivos devem ser PascalCase e .tsx ou .css', () => {
-      const dir = path.join(srcPath, 'components');
-      const files = getFiles(dir).map(f => path.basename(f));
-
-      const regex = /^[A-Z][a-zA-Z0-9]*\.(tsx|css)$/;
-
-      files.forEach(file => {
-        expect(file, `Erro em components: ${file}`).toMatch(regex);
-      });
+      validateFiles('components', /^[A-Z][a-zA-Z0-9]*\.(tsx|css)$/, 'Erro em components');
     });
   });
 
   describe('src/pages/', () => {
     test('Arquivos devem terminar com Page.tsx ou Page.css', () => {
-      const dir = path.join(srcPath, 'pages');
-      const files = getFiles(dir).map(f => path.basename(f));
+      validateFiles('pages', /^[A-Z][a-zA-Z0-9]*Page\.(tsx|css)$/, 'Erro em pages');
+    });
+  });
 
-      const regex = /^[A-Z][a-zA-Z0-9]*Page\.(tsx|css)$/;
-
-      files.forEach(file => {
-        expect(file, `Erro em pages: ${file}`).toMatch(regex);
-      });
+  describe('src/store/', () => {
+    test('Arquivos devem ser camelCase e terminar com Store.ts', () => {
+      validateFiles('store', /^[a-z][a-zA-Z0-9]*Store\.ts$/, 'Erro em store');
     });
   });
 
   describe('src/services/', () => {
     test('Arquivos devem terminar com Service.ts', () => {
-      const dir = path.join(srcPath, 'services');
-      const files = getFiles(dir).map(f => path.basename(f));
-      const regex = /^[a-z][a-zA-Z0-9]*Service\.ts$/;
-
-      files.forEach(file => {
-        expect(file, `Erro em services: ${file}`).toMatch(regex);
-      });
+      validateFiles('services', /^[a-z][a-zA-Z0-9]*Service\.ts$/, 'Erro em services');
     });
   });
 
   describe('src/hooks/', () => {
     test('Arquivos devem começar com "use" e ser .ts ou .tsx', () => {
-      const dir = path.join(srcPath, 'hooks');
-      const files = getFiles(dir).map(f => path.basename(f));
-      const regex = /^use[A-Z][a-zA-Z0-9]*\.tsx?$/;
-
-      files.forEach(file => {
-        expect(file, `Erro em hooks: ${file}`).toMatch(regex);
-      });
+      validateFiles('hooks', /^use[A-Z][a-zA-Z0-9]*\.tsx?$/, 'Erro em hooks');
     });
   });
 
   describe('src/utils/', () => {
     test('Arquivos devem ser camelCase e .ts', () => {
-      const dir = path.join(srcPath, 'utils');
-      const files = getFiles(dir).map(f => path.basename(f));
-      const regex = /^[a-z][a-zA-Z0-9]*\.ts$/;
-
-      files.forEach(file => {
-        expect(file, `Erro em utils: ${file}`).toMatch(regex);
-      });
+      validateFiles('utils', /^[a-z][a-zA-Z0-9]*\.ts$/, 'Erro em utils');
     });
   });
 
   describe('src/types/', () => {
     test('Arquivos devem terminar com .types.ts', () => {
-      const dir = path.join(srcPath, 'types');
-      const files = getFiles(dir).map(f => path.basename(f));
-      const regex = /^[a-z][a-zA-Z0-9]*\.types\.ts$/;
-
-      files.forEach(file => {
-        expect(file, `Erro em types: ${file}`).toMatch(regex);
-      });
+      validateFiles('types', /^[a-z][a-zA-Z0-9]*\.types\.ts$/, 'Erro em types');
     });
   });
 });
