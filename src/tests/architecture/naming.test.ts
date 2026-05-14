@@ -1,13 +1,18 @@
+/// <reference types="node" />
+
 import { describe, test, expect } from 'vitest';
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import { fileURLToPath } from 'node:url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function getFiles(dir: string, allFiles: string[] = []): string[] {
   if (!fs.existsSync(dir)) return allFiles;
   
   const files = fs.readdirSync(dir);
 
-  files.forEach((file) => {
+  files.forEach((file: string) => {
     const filePath = path.join(dir, file);
     const stats = fs.statSync(filePath);
 
