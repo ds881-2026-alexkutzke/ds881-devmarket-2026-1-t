@@ -23,10 +23,13 @@ A separação de responsabilidades é rígida. Componentes visuais não devem co
 ├── public/              # Assets estáticos (ícones, imagens base)
 ├── src/
 │   ├── components/      # Componentes visuais reutilizáveis (Botões, Cards)
-|   |     └── sytles/    # Arquivos de estilização dos componentes
+|   |     └── styles/    # Arquivos de estilização dos componentes
+│   ├── hooks/           # Lógica de estado e efeitos reutilizáveis (Custom Hooks)
 │   ├── pages/           # Componentes de visualização de rotas (Home, Checkout)
-|   |     └── sytles/    # Arquivos de estilização das páginas
+|   |     └── styles/    # Arquivos de estilização das páginas
 │   ├── services/        # Exclusivo para chamadas de API (fetch/axios)
+│   ├── tests/           # Testes automatizados (Unitários, Integração, Arquitetura)
+│   ├── types/           # Definições de tipos e interfaces TypeScript
 │   ├── store/           # Gerenciamento de estado global (Context, Redux, Zustand)
 │   └── utils/           # Funções auxiliares (formatadores de moeda, máscaras)
 ├── Dockerfile           # Definição do ambiente de homologação local
