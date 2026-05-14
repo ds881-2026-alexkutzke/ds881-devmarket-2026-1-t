@@ -1,0 +1,33 @@
+services:
+  # Serviço de desenvolvimento local com hot reload.
+  # Usa Node dentro do container, então o desenvolvedor não precisa instalar Node.js na máquina.
+  dev:
+    image: node:20-alpine
+    working_dir: /app
+
+    # Bind mount: monta o diretório atual dentro do container.
+    # Isso permite hot reload, pois alterações feitas no VS Code aparecem no container.
+    volumes:
+      - .:/app
+
+      # Volume anônimo para node_modules.
+      # Evita que a pasta node_modules do container seja sobrescrita pelo host.
+      - /app/node_modules
+
+    # Porta padrão do Vite: host 5173 -> container 5173.
+    ports:
+      - "5173:5173"
+
+    # Instala dependências dentro do container e inicia o Vite acessível fora do container.
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+
+  # Serviço para simular produção localmente.
+  # Usa o Dockerfile existente, que gera o build e serve os arquivos pelo Nginx.
+  prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    # Host 8080 -> porta 80 do Nginx dentro do container.
+    ports:
+      - "8080:80"
