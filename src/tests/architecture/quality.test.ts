@@ -199,3 +199,86 @@ describe('Regras gerais de qualidade', () => {
     expect(violations, 'Dependencia circular nao permitida').toEqual([]);
   });
 });
+
+describe('Regras de Arquitetura de Importação', () => {
+  function getFolderName(filePath: string): string {
+    const segments = relativeToSrc(filePath).split('/');
+    return segments[0];
+  }
+
+  function fileIsInFolder(filePath: string, folderName: string): boolean {
+    return getFolderName(filePath) === folderName;
+  }
+
+  test('services/ nao pode importar de components/, pages/, ou hooks/', () => {
+    const files = getFiles(srcPath, sourceExtensions, true);
+    const knownFiles = new Set(files);
+    const violations: string[] = [];
+
+    files
+      .filter((file) => fileIsInFolder(file, 'services'))
+      .forEach((file) => {
+        const edges = getImportEdges(file, knownFiles);
+
+        edges.forEach((edge) => {
+          const targetFolder = getFolderName(edge.to);
+
+          if (['components', 'pages', 'hooks'].includes(targetFolder)) {
+            violations.push(
+              `${relativeToSrc(edge.from)}:${edge.line} nao pode importar de ${targetFolder}/ (importou: ${relativeToSrc(edge.to)})`,
+            );
+          }
+        });
+      });
+
+    expect(violations, 'Services nao podem importar de components/, pages/ ou hooks/').toEqual([]);
+  });
+
+  test('components/ nao pode importar de pages/ ou services/', () => {
+    const files = getFiles(srcPath, sourceExtensions, true);
+    const knownFiles = new Set(files);
+    const violations: string[] = [];
+
+    files
+      .filter((file) => fileIsInFolder(file, 'components'))
+      .forEach((file) => {
+        const edges = getImportEdges(file, knownFiles);
+
+        edges.forEach((edge) => {
+          const targetFolder = getFolderName(edge.to);
+
+          if (['pages', 'services'].includes(targetFolder)) {
+            violations.push(
+              `${relativeToSrc(edge.from)}:${edge.line} nao pode importar de ${targetFolder}/ (importou: ${relativeToSrc(edge.to)})`,
+            );
+          }
+        });
+      });
+
+    expect(violations, 'Components nao podem importar de pages/ ou services/').toEqual([]);
+  });
+
+  test('pages/ nao pode importar de outras pages/', () => {
+    const files = getFiles(srcPath, sourceExtensions, true);
+    const knownFiles = new Set(files);
+    const violations: string[] = [];
+
+    files
+      .filter((file) => fileIsInFolder(file, 'pages'))
+      .forEach((file) => {
+        const edges = getImportEdges(file, knownFiles);
+
+        edges.forEach((edge) => {
+          const targetFolder = getFolderName(edge.to);
+
+          if (targetFolder === 'pages' && edge.to !== file) {
+            violations.push(
+              `${relativeToSrc(edge.from)}:${edge.line} nao pode importar de outra page/ (importou: ${relativeToSrc(edge.to)})`,
+            );
+          }
+        });
+      });
+
+    expect(violations, 'Pages nao podem importar de outras pages/').toEqual([]);
+  });
+});
