@@ -1,15 +1,16 @@
-import { routes } from './routes';
+import { BrowserRouter, useRoutes } from "react-router-dom";
+import { routes } from "./routes";
+
+function AppRoutes() {
+  return useRoutes(routes);
+}
 
 function App() {
-  const currentPath = window.location.pathname;
-  const route = routes.find(r => r.path === currentPath);
-
   return (
-    <div className="app-container">
-      {route ? <route.component /> : <h1>404 - Página não encontrada</h1>}
-    </div>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   );
 }
 
 export default App;
-

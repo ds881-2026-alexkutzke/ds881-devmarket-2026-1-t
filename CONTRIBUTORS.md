@@ -16,6 +16,8 @@ EQUIPE A
 
     Johnny Labes, PO, johnny_75768, https://github.com/jlabes
 
+    Gabriela Morais Gandine, DEV, melonlord, https://github.com/gabi-gandine
+
 EQUIPE B
 
     Clarissa Morita, Dev, cissa, https://github.com/cissamil 
