@@ -3,6 +3,8 @@ import fs from 'fs'
 import path from 'path'
 
 function getFiles(dir: string, fileList: string[]) {
+    if (!fs.existsSync(dir)) return fileList;
+
     const files = fs.readdirSync(dir, { withFileTypes: true });
 
     for (const file of files) {
