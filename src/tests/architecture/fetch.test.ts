@@ -20,8 +20,11 @@ function getFiles(dir: string, fileList: string[]) {
 describe('Convenção de chamada para API', () => {
     const forbiddenPatterns = /fetch\(|axios|XMLHttpRequest/
 
-    const componentFiles = getFiles('./src/pages/', [])
-    const pageFiles = getFiles('./src/components/', [])
+    const srcPath = path.resolve(__dirname, '../../../src')
+
+    const pageFiles = getFiles(path.join(srcPath, 'pages'), [])
+    const componentFiles = getFiles(path.join(srcPath, 'components'), [])
+
 
     test.each(componentFiles)('Verificando %s', (filePath) => {
         const content = fs.readFileSync(path.resolve(filePath), 'utf-8')
