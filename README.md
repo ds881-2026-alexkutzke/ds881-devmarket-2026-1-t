@@ -1,5 +1,7 @@
 # DevMarket
 
+[![CI](https://github.com/ds881-2026-alexkutzke/ds881-devmarket-2026-1-t/actions/workflows/ci.yml/badge.svg)](https://github.com/ds881-2026-alexkutzke/ds881-devmarket-2026-1-t/actions/workflows/ci.yml)
+
 ## Fluxo de trabalho
 
 1. Puxar Tarefa (Self-Assign): Acesse o Board do projeto no GitHub. Escolha uma issue da coluna "To Do" que não tenha ninguém atribuído. Abra a issue, clique em Assignees (na barra lateral direita) e selecione assign yourself (atribuir a si mesmo).
