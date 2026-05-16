@@ -8,11 +8,10 @@ describe("Architecture | Routes", () => {
     const content = readFileSync(appPath, "utf8");
     const hasPagesImport = /from\s+["']\.\.?\/pages\//.test(content);
 
-    expect(hasPagesImport).toBe(false);
-    if (hasPagesImport) {
-      throw new Error(
-        "App.tsx não deve importar páginas diretamente. Use o arquivo routes.ts para registrar novas rotas."
-      );
-    }
+    expect(
+      hasPagesImport, 
+      "App.tsx não deve importar páginas diretamente. " + 
+      "Use routes.tsx para registrar novas rotas.")
+      .toBe(false);
   });
 });
