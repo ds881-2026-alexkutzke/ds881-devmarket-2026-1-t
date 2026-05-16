@@ -6,9 +6,8 @@ export interface BuyerInfo {
 
 export interface AddressInfo {
   cep: string;
-  logradouro: string;
-  bairro: string;
-  cidade: string;
-  uf: string,
-  numero: string
+  street: string;
+  neighborhood: string;
+  city: string;
+  state: string,
 }
