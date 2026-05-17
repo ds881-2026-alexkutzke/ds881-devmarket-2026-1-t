@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { fetchProductById } from '../services/productService';
 import type { Product } from '../types/product.types.ts';
 import './styles/HomePage.css';
@@ -19,11 +20,11 @@ const HomePage = () => {
   return (
     <main>
       <h1>PoC: Conexão com API</h1>
-      <div className="product-card">
+      <Link to={`/produto/${product.id}`} className="product-card" style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
         <h2>{product.title}</h2>
         <p>{product.description}</p>
         <p>Preço: ${product.price}</p>
-      </div>
+      </Link>
     </main>
   );
 };
