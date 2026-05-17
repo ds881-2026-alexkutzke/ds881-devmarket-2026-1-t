@@ -1,11 +1,4 @@
-//esperando pr da issue #50 ser aprovado para usar /types/checkout.types.ts
-export interface AddressInfo {
-  cep: string;
-  street: string;
-  neighborhood: string;
-  city: string;
-  state: string;
-}
+import type { AddressInfo } from '../types/checkout.types.ts';
 
 type ViaCepResponse = {
   cep: string;
