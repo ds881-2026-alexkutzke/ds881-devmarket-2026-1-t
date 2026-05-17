@@ -1,4 +1,7 @@
 .product-card {
   border: 1px solid #ccc;
   padding: 1rem;
+  display: block;
+  text-decoration: none;
+  color: inherit;
 }
