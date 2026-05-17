@@ -20,7 +20,7 @@ const HomePage = () => {
   return (
     <main>
       <h1>PoC: Conexão com API</h1>
-      <Link to={`/produto/${product.id}`} className="product-card" style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
+      <Link to={`/produto/${product.id}`} className="product-card">
         <h2>{product.title}</h2>
         <p>{product.description}</p>
         <p>Preço: ${product.price}</p>
