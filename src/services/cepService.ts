@@ -20,8 +20,13 @@ function normalizeCep(cep: string): string {
   return cep.replace(/\D/g, '');
 }
 
-export const fetchCep = async (cep: string): Promise<AddressInfo> => {
+export const fetchAddressByCep = async (cep: string): Promise<AddressInfo> => {
   const normalizedCep = normalizeCep(cep);
+
+  if (normalizedCep.length !== 8) {
+    throw new Error('CEP deve conter 8 dígitos');
+  }
+
   const response = await fetch(`https://viacep.com.br/ws/${normalizedCep}/json/`);
 
   if (!response.ok) {
