@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getFirstProduct } from '../services/productService';
+import { fetchProductById } from '../services/productService';
 import type { Product } from '../types/product.types.ts';
 import './styles/HomePage.css';
 
@@ -8,7 +8,7 @@ const HomePage = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    getFirstProduct()
+    fetchProductById(1)
       .then(data => setProduct(data))
       .catch(() => setError('Erro ao carregar produto'));
   }, []);
