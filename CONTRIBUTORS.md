@@ -20,6 +20,8 @@ EQUIPE A
 
 EQUIPE B
 
+    Ana Clara Martins Batista, Dev, anambclara, https://github.com/anambclara
+
     Clarissa Morita, Dev, cissa, https://github.com/cissamil 
 
     Felyppe Marcelo da Silva, Dev, lyppe1201, https://github.com/felyppe1201
