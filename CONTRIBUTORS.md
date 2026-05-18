@@ -46,6 +46,8 @@ EQUIPE C
 
 EQUIPE D
 
+    Bruno Brugnerotto, Dev, BrunoBrug, https://github.com/BrunoBrug
+
     Dyego Dasko, Dev, salazin., https://github.com/Dasko7b
 
     Jamily Notario, PO, jamily-not, https://github.com/jamily-not
