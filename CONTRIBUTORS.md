@@ -43,6 +43,8 @@ EQUIPE C
     Matheus José Chaves de Lima, SM, tigrezo.vipo, https://github.com/mateoclima
 
     Peterson Fontinhas, TL, pafontinhas, https://github.com/PAFONTINHAS
+    
+    Leonardo Alberto, Dev, leonardo_31421, https://github.com/leonardoalberto733
 
 EQUIPE D
 
