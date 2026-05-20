@@ -10,6 +10,19 @@ type ImportEdge = {
   line: number;
 };
 
+type Layer = 'pages' | 'components' | 'services' | 'hooks' | 'utils' | 'types' | 'store';
+
+const LAYERS: Layer[] = ['pages', 'components', 'services', 'hooks', 'utils', 'types', 'store'];
+
+const FORBIDDEN_RULES: Partial<Record<Layer, Layer[]>> = {
+  pages: ['pages'],
+  components: ['pages', 'services'],
+  services: ['components', 'pages', 'hooks'],
+  hooks: ['components', 'pages'],
+  utils: ['components', 'pages', 'hooks', 'services'],
+  store: ['components', 'pages'],
+};
+
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
 const srcPath = path.resolve(currentDir, '../..');
 const sourceExtensions = new Set(['.ts', '.tsx']);
@@ -60,6 +73,20 @@ function findRegexViolations(files: string[], regex: RegExp): string[] {
 }
 
 function resolveImport(fromFile: string, importPath: string, knownFiles: Set<string>): string | null {
+  if (importPath.startsWith('@/')) {
+    const aliasPath = path.resolve(srcPath, importPath.slice(2));
+    const aliasCandidates = path.extname(aliasPath)
+      ? [aliasPath]
+      : [
+          `${aliasPath}.ts`,
+          `${aliasPath}.tsx`,
+          path.join(aliasPath, 'index.ts'),
+          path.join(aliasPath, 'index.tsx'),
+        ];
+
+    return aliasCandidates.find((candidate) => knownFiles.has(candidate)) ?? null;
+  }
+
   if (!importPath.startsWith('.')) return null;
 
   const basePath = path.resolve(path.dirname(fromFile), importPath);
@@ -198,87 +225,51 @@ describe('Regras gerais de qualidade', () => {
 
     expect(violations, 'Dependencia circular nao permitida').toEqual([]);
   });
-});
 
-describe('Regras de Arquitetura de Importação', () => {
-  function getFolderName(filePath: string): string {
-    const segments = relativeToSrc(filePath).split('/');
-    return segments[0];
-  }
-
-  function fileIsInFolder(filePath: string, folderName: string): boolean {
-    return getFolderName(filePath) === folderName;
-  }
-
-  test('services/ nao pode importar de components/, pages/, ou hooks/', () => {
-    const files = getFiles(srcPath, sourceExtensions, true);
-    const knownFiles = new Set(files);
-    const violations: string[] = [];
-
-    files
-      .filter((file) => fileIsInFolder(file, 'services'))
-      .forEach((file) => {
-        const edges = getImportEdges(file, knownFiles);
-
-        edges.forEach((edge) => {
-          const targetFolder = getFolderName(edge.to);
-
-          if (['components', 'pages', 'hooks'].includes(targetFolder)) {
-            violations.push(
-              `${relativeToSrc(edge.from)}:${edge.line} nao pode importar de ${targetFolder}/ (importou: ${relativeToSrc(edge.to)})`,
-            );
-          }
-        });
-      });
-
-    expect(violations, 'Services nao podem importar de components/, pages/ ou hooks/').toEqual([]);
+  test('mapa de regras proibidas confere com as camadas solicitadas', () => {
+    expect(FORBIDDEN_RULES).toEqual({
+      pages: ['pages'],
+      components: ['pages', 'services'],
+      services: ['components', 'pages', 'hooks'],
+      hooks: ['components', 'pages'],
+      utils: ['components', 'pages', 'hooks', 'services'],
+      store: ['components', 'pages'],
+    });
   });
 
-  test('components/ nao pode importar de pages/ ou services/', () => {
+  function getLayerFromPath(filePath: string): Layer | null {
+    const [firstSegment] = normalizePath(filePath).split('/');
+    return firstSegment && LAYERS.includes(firstSegment as Layer) ? (firstSegment as Layer) : null;
+  }
+
+  test('valida as regras restritas de importacao entre camadas', () => {
     const files = getFiles(srcPath, sourceExtensions, true);
     const knownFiles = new Set(files);
     const violations: string[] = [];
 
-    files
-      .filter((file) => fileIsInFolder(file, 'components'))
-      .forEach((file) => {
-        const edges = getImportEdges(file, knownFiles);
+    files.forEach((file) => {
+      const edges = getImportEdges(file, knownFiles);
+      const fromRelative = relativeToSrc(file);
+      const importerLayer = getLayerFromPath(fromRelative);
 
-        edges.forEach((edge) => {
-          const targetFolder = getFolderName(edge.to);
+      if (!importerLayer) return;
 
-          if (['pages', 'services'].includes(targetFolder)) {
-            violations.push(
-              `${relativeToSrc(edge.from)}:${edge.line} nao pode importar de ${targetFolder}/ (importou: ${relativeToSrc(edge.to)})`,
-            );
-          }
-        });
+      edges.forEach((edge) => {
+        const toRelative = relativeToSrc(edge.to);
+        const importedLayer = getLayerFromPath(toRelative);
+
+        if (!importedLayer) return;
+
+        const forbiddenImports = FORBIDDEN_RULES[importerLayer] || [];
+
+        if (forbiddenImports.includes(importedLayer)) {
+          violations.push(
+            `${fromRelative}:${edge.line} importou de "${toRelative}". Regra violada: ${importerLayer} nao pode importar de ${importedLayer}.`,
+          );
+        }
       });
+    });
 
-    expect(violations, 'Components nao podem importar de pages/ ou services/').toEqual([]);
-  });
-
-  test('pages/ nao pode importar de outras pages/', () => {
-    const files = getFiles(srcPath, sourceExtensions, true);
-    const knownFiles = new Set(files);
-    const violations: string[] = [];
-
-    files
-      .filter((file) => fileIsInFolder(file, 'pages'))
-      .forEach((file) => {
-        const edges = getImportEdges(file, knownFiles);
-
-        edges.forEach((edge) => {
-          const targetFolder = getFolderName(edge.to);
-
-          if (targetFolder === 'pages' && edge.to !== file) {
-            violations.push(
-              `${relativeToSrc(edge.from)}:${edge.line} nao pode importar de outra page/ (importou: ${relativeToSrc(edge.to)})`,
-            );
-          }
-        });
-      });
-
-    expect(violations, 'Pages nao podem importar de outras pages/').toEqual([]);
+    expect(violations, 'Quebra de regra de arquitetura nas importacoes').toEqual([]);
   });
 });
