@@ -11,7 +11,7 @@ export const useCategories = () => {
         const data = await fetchCategories();
         setCategories(data);
       } catch (error) {
-        console.error("Erro ao carregar as categorias:", error);
+        
       } finally {
         setLoading(false);
       }
