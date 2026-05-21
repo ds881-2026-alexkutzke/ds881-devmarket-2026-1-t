@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import "./styles/ProductGallery.css";
 
@@ -9,38 +9,15 @@ type ProductGalleryProps = {
 const COMPACT_LIMIT = 4;
 
 export default function ProductGallery({ images }: ProductGalleryProps) {
-  const [selectedImage, setSelectedImage] = useState("");
-  const [mainHeight, setMainHeight] = useState<number | null>(null);
+  const [selectedImage, setSelectedImage] = useState(images[0] ?? "");
 
-  const mainRef = useRef<HTMLDivElement>(null);
   const thumbnailsRef = useRef<HTMLDivElement>(null);
 
   const compactMode = images.length <= COMPACT_LIMIT;
 
-  useEffect(() => {
-    if (images.length > 0 && !images.includes(selectedImage)) {
-      setSelectedImage(images[0]);
-    }
-  }, [images, selectedImage]);
-
-  useLayoutEffect(() => {
-    const updateHeight = () => {
-      if (!mainRef.current) return;
-      setMainHeight(mainRef.current.getBoundingClientRect().height);
-    };
-
-    updateHeight();
-
-    const observer = new ResizeObserver(updateHeight);
-    if (mainRef.current) observer.observe(mainRef.current);
-
-    window.addEventListener("resize", updateHeight);
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("resize", updateHeight);
-    };
-  }, []);
+  const currentImage = images.includes(selectedImage)
+    ? selectedImage
+    : (images[0] ?? "");
 
   const scrollThumbnails = (direction: "up" | "down") => {
     if (!thumbnailsRef.current) return;
@@ -57,7 +34,9 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
 
   return (
     <div
-      className={`product-gallery ${compactMode ? "product-gallery--compact" : "product-gallery--scroll"}`}
+      className={`product-gallery ${
+        compactMode ? "product-gallery--compact" : "product-gallery--scroll"
+      }`}
     >
       <div className="product-gallery__content">
         <div className="product-gallery__sidebar">
@@ -84,7 +63,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
                 key={image}
                 type="button"
                 className={`product-gallery__thumbnail ${
-                  selectedImage === image
+                  currentImage === image
                     ? "product-gallery__thumbnail--active"
                     : ""
                 }`}
@@ -110,10 +89,10 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
           )}
         </div>
 
-        <div ref={mainRef} className="product-gallery__main">
+        <div className="product-gallery__main">
           <img
             className="product-gallery__main-image"
-            src={selectedImage}
+            src={currentImage}
             alt="Imagem principal do produto"
           />
         </div>
