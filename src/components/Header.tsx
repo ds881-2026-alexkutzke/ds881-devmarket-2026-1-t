@@ -20,7 +20,7 @@ export default function Header({ cartCount = 0 }: HeaderProps) {
 
       {/* Adicione aqui a rota da pagina Carrinho */}
       <div className="header__cart">
-        <FiShoppingCart className="header__cart-icon" />
+        <span className="header__cart-icon"><FiShoppingCart /></span>
         {cartCount > 0 && (
           <span className="header__badge">{cartCount}</span>
         )}
