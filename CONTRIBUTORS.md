@@ -31,7 +31,7 @@ EQUIPE B
     Sabrina Dorigoni Pelentir, SM, sadzpea, https://github.com/sabrina-dp
 
     Maria Fernanda Zandona Casagrande, DEV, maferzc, https://github.com/fe-fe
-
+    
 EQUIPE C
 
     Bruna de Lima, Dev, ibrunny, https://github.com/ibrunny
