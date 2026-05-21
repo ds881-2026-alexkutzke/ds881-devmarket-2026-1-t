@@ -9,6 +9,7 @@ type PixQrCodeProps = {
 
 export default function PixQrCode({ payload }: PixQrCodeProps) {
     const [qrCodeUrl, setQrCodeUrl] = useState("");
+    const [errorQr, setErrorQr] = useState("");
 
     if (!payload) {
         return <div className="pix-qr-code-error">Erro: Qr code não fornecido.</div>;
@@ -20,7 +21,7 @@ export default function PixQrCode({ payload }: PixQrCodeProps) {
                 const url = await QRCode.toDataURL(payload);
                 setQrCodeUrl(url);
             } catch (error) {
-                console.error("Erro ao gerar QR Code:", error);
+                setErrorQr(`Erro ao gerar QR Code. ${error}`);
             }
         }
 
@@ -31,9 +32,14 @@ export default function PixQrCode({ payload }: PixQrCodeProps) {
 
 
     return (
-        <img
-            src={qrCodeUrl}
-            alt="QR Code PIX"
-        />
+        <>
+            {errorQr && <div className="pix-qr-code-error">{errorQr}</div>}
+            {qrCodeUrl && (
+                <img
+                    src={qrCodeUrl}
+                    alt="QR Code PIX"
+                />
+            )}
+        </>
     );
 }
