@@ -1,0 +1,12 @@
+# dependências do projeto e arquivos gerados pelo build
+node_modules
+dist*
+
+# arquivos git/github e do SO
+.git
+.github
+.gitignore
+.DS_Store
+
+# arquivos markdown
+*.md

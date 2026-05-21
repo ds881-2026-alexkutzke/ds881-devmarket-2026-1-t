@@ -6,24 +6,56 @@ nome, papel no projeto (PO, SM, TL ou DEV), usuário no discord e link do perfil
 
 EQUIPE A
 
+    Bruno Pedron Rupaner, Dev, bruno_pedron, https://github.com/bruno-pedron
+    
+    Lucas Garzuze Cordeiro, TL, garzuze, https://github.com/garzuze
+
+    Pedro Eduardo Dall' Agnol, DEV, nero_515., https://github.com/NeroPRDO
+
     Roberto Rigo, Dev, xariote, https://github.com/xariote
+
+    Johnny Labes, PO, johnny_75768, https://github.com/jlabes
+
+    Gabriela Morais Gandine, DEV, melonlord, https://github.com/gabi-gandine
 
 EQUIPE B
 
+    Ana Clara Martins Batista, Dev, anambclara, https://github.com/anambclara
+
+    Clarissa Morita, Dev, cissa, https://github.com/cissamil 
+
+    Felyppe Marcelo da Silva, Dev, lyppe1201, https://github.com/felyppe1201
+
     Pedro Novak Wosch, Dev, Kaironst, https://github.com/Kaironst
 
-    Felyppe Marcelo da Silva, DEV, lyppe1201, https://github.com/felyppe1201
+    Sabrina Dorigoni Pelentir, SM, sadzpea, https://github.com/sabrina-dp
 
+    Maria Fernanda Zandona Casagrande, DEV, maferzc, https://github.com/fe-fe
+    
 EQUIPE C
-
-    Daniela Tamy, Dev, danitamyy, https://github.com/DanielaTamy
 
     Bruna de Lima, Dev, ibrunny, https://github.com/ibrunny
 
+    Daniela Tamy, Dev, danitamyy, https://github.com/DanielaTamy
+
+    Henrique Meneses, Dev, z3nrique, https://github.com/z3nrique
+
+    Matheus José Chaves de Lima, SM, tigrezo.vipo, https://github.com/mateoclima
+
+    Peterson Fontinhas, TL, pafontinhas, https://github.com/PAFONTINHAS
+    
+    Leonardo Alberto, Dev, leonardo_31421, https://github.com/leonardoalberto733
+
 EQUIPE D
 
-    Thiago Tanaka Peczek, TL, ttpgamer, https://github.com/Thiago-Peczek
+    Bruno Brugnerotto, Dev, BrunoBrug, https://github.com/BrunoBrug
+
+    Dyego Dasko, Dev, salazin., https://github.com/Dasko7b
+
+    Jamily Notario, PO, jamily-not, https://github.com/jamily-not
 
     Leticia Sanches, Dev, kthvamp, https://github.com/Lsats
 
     Paulo Roberto Gomes Barroso Schiochet, Dev, garlicn, https://github.com/pauloschiochetufpr
+
+    Thiago Tanaka Peczek, TL, ttpgamer, https://github.com/Thiago-Peczek
