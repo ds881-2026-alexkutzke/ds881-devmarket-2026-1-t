@@ -6,6 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-sizing: border-box;
 }
 
 .header__logo {
@@ -13,6 +14,12 @@
   font-weight: 700;
   color: #1a1a1a;
   text-decoration: none;
+}
+
+.header__right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
 }
 
 .header__nav {
@@ -41,6 +48,8 @@
   width: 1.5rem;
   height: 1.5rem;
   color: #374151;
+  display: flex;
+  align-items: center;
 }
 
 .header__badge {
