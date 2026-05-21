@@ -10,7 +10,7 @@ export const fetchBRLConversionRate = async (): Promise<number | null> => {
     
     const data = await response.json();
     return data.rates.BRL;
-  } catch (error) {
+  } catch { 
     // Retorna null em caso de falha para ativar o fallback seguro em USD
     return null; 
   }
