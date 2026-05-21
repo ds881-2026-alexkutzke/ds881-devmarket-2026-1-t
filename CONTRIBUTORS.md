@@ -46,7 +46,7 @@ EQUIPE C
     
     Leonardo Alberto, Dev, leonardo_31421, https://github.com/leonardoalberto733
 
-    Thiago de lima de assi cordeiro, Dev, thiago-cordeiro, https://github.com/Thiago-cordeiro
+    Thiago de lima de assis cordeiro, Dev, thiago-cordeiro, https://github.com/Thiago-cordeiro
 
 EQUIPE D
 
