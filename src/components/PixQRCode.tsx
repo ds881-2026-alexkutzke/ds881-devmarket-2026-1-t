@@ -10,11 +10,7 @@ type PixQrCodeProps = {
 export default function PixQrCode({ payload }: PixQrCodeProps) {
     const [qrCodeUrl, setQrCodeUrl] = useState("");
     const [errorQr, setErrorQr] = useState("");
-
-    if (!payload) {
-        return <div className="pix-qr-code-error">Erro: Qr code não fornecido.</div>;
-    }
-
+   
     useEffect(() => {
         async function generateQRCode() {
             try {
@@ -30,6 +26,9 @@ export default function PixQrCode({ payload }: PixQrCodeProps) {
         }
     }, [payload]);
 
+    if (!payload) {
+        return <div className="pix-qr-code-error">Erro: Qr code não fornecido.</div>;
+    }
 
     return (
         <>
