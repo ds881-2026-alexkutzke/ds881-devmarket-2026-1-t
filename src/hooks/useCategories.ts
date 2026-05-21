@@ -10,7 +10,7 @@ export const useCategories = () => {
       try {
         const data = await fetchCategories();
         setCategories(data);
-      } catch (error) {
+      } catch {
         
       } finally {
         setLoading(false);
