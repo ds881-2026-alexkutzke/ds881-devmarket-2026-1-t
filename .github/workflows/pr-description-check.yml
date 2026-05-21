@@ -1,0 +1,21 @@
+name: Validar Descrição do PR
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  check-body-length:
+    name: Verificar tamanho do texto
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validar caracteres
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.pull_request.body;
+            if (!body || body.trim().length < 20) {
+              core.setFailed("Erro: A descrição do seu Pull Request está muito curta ou vazia. Por favor, edite o PR e preencha o template corretamente com pelo menos 20 caracteres.");
+            } else {
+              console.log("Descrição possui tamanho adequado.");
+            }
