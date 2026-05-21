@@ -11,7 +11,7 @@ export const useCategories = () => {
         const data = await fetchCategories();
         setCategories(data);
       } catch {
-        
+        return;
       } finally {
         setLoading(false);
       }
