@@ -3,21 +3,29 @@ import './styles/ProductCard.css';
 
 type ProductCardProps = {
   product: Product;
+  // Nova prop opcional para receber a cotação da página
+  conversionRate?: number | null; 
 };
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, conversionRate }: ProductCardProps) {
   if (!product) {
     return <div className="product-card-error">Erro: Produto não fornecido.</div>;
   }
 
-  const formattedPrice = new Intl.NumberFormat('en-US', {
+  // Verifica se a cotação foi passada e é válida
+  const isBRL = conversionRate != null && conversionRate > 0;
+  
+  // Calcula o preço final com base na moeda
+  const finalPrice = isBRL ? (product.price || 0) * conversionRate : (product.price || 0);
+
+  // Formata dinamicamente
+  const formattedPrice = new Intl.NumberFormat(isBRL ? 'pt-BR' : 'en-US', {
     style: 'currency',
-    currency: 'USD',
-  }).format(product.price || 0);
+    currency: isBRL ? 'BRL' : 'USD',
+  }).format(finalPrice);
 
   return (
     <article className="product-card">
-      {/* Imagem em miniatura */}
       <div className="product-card-image-wrapper">
         <img 
           src={product.thumbnail || 'https://via.placeholder.com/150'} 
@@ -27,11 +35,11 @@ export default function ProductCard({ product }: ProductCardProps) {
         />
       </div>
 
-      {/* Informações do Produto */}
       <div className="product-card-content">
         <h3 className="product-card-title" title={product.title || ''}>
           {product.title || 'Produto sem título'}
         </h3>
+        
         <p className="product-card-price">
           {formattedPrice}
         </p>

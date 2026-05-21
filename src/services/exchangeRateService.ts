@@ -1,0 +1,17 @@
+// src/services/exchangeRateService.ts
+
+export const fetchBRLConversionRate = async (): Promise<number | null> => {
+  try {
+    const response = await fetch('https://open.er-api.com/v6/latest/USD');
+    
+    if (!response.ok) {
+      throw new Error(`Erro HTTP: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data.rates.BRL;
+  } catch (error) {
+    // Retorna null em caso de falha para ativar o fallback seguro em USD
+    return null; 
+  }
+};
