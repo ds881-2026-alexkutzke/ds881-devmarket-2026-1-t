@@ -37,7 +37,7 @@ const srcPath = path.resolve(__dirname, '../../');
 
 function validateFiles(folder: string, regex: RegExp, errorMessage: string) {
   const dir = path.join(srcPath, folder);
-  if (!fs.existsSync(dir)) throw new Error(`nenhum diretório encontrado -> ${folder} `);
+  if (!fs.existsSync(dir)) throw new Error(`nenhum diretório encontrado -> ${dir} `);
 
   const files = getFiles(dir).map(f => path.basename(f));
   files.forEach(file => {
