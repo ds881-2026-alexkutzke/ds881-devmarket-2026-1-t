@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 
 function getFiles(dir: string, fileList: string[]) {
-  if (!fs.existsSync(dir)) throw new Error("nenhum arquivo encontrado");
+  if (!fs.existsSync(dir)) throw new Error(`nenhum diretório encontrado -> ${dir} `);
 
   const files = fs.readdirSync(dir, { withFileTypes: true });
 

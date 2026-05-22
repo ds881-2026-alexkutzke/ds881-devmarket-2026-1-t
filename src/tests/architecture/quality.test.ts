@@ -40,7 +40,7 @@ function getLine(content: string, index: number): number {
 }
 
 function getFiles(dir: string, extensions: Set<string>, excludeTests = false): string[] {
-  if (!fs.existsSync(dir)) throw new Error("nenhum arquivo encontrado");
+  if (!fs.existsSync(dir)) throw new Error(`nenhum diretório encontrado -> ${dir} `);
 
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const entryPath = path.join(dir, entry.name);
