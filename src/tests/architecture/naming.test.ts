@@ -8,6 +8,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 function getFiles(dir: string, allFiles: string[] = []): string[] {
+  if (!fs.existsSync(dir)) throw new Error("nenhum arquivo encontrado");
+
   const files = fs.readdirSync(dir);
 
   files.forEach((file: string) => {
@@ -35,6 +37,7 @@ const srcPath = path.resolve(__dirname, '../../');
 
 function validateFiles(folder: string, regex: RegExp, errorMessage: string) {
   const dir = path.join(srcPath, folder);
+  if (!fs.existsSync(dir)) throw new Error("nenhum arquivo encontrado");
 
   const files = getFiles(dir).map(f => path.basename(f));
   files.forEach(file => {
