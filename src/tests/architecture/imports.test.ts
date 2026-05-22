@@ -54,7 +54,7 @@ function isCodeImport(importPath: string): boolean {
 }
 
 function getSourceFiles(dir: string): string[] {
-  if (!fs.existsSync(dir)) return [];
+  if (!fs.existsSync(dir)) throw new Error("nenhum arquivo encontrado");
 
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   const files: string[] = [];
