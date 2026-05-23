@@ -25,7 +25,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
   }
 }
 
-export const CartContext = createContext<CartContextValue | undefined>(undefined);
+const CartContext = createContext<CartContextValue | undefined>(undefined);
 
 export function CartProvider({ children }: CartProviderProps) {
   const [state, dispatch] = useReducer(cartReducer, initialState);
