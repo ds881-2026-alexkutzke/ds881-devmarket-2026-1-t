@@ -8,8 +8,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 function getFiles(dir: string, allFiles: string[] = []): string[] {
-  if (!fs.existsSync(dir)) return allFiles;
-  
+  if (!fs.existsSync(dir)) throw new Error(`nenhum diretório encontrado -> ${dir} `);
+
   const files = fs.readdirSync(dir);
 
   files.forEach((file: string) => {
@@ -37,7 +37,7 @@ const srcPath = path.resolve(__dirname, '../../');
 
 function validateFiles(folder: string, regex: RegExp, errorMessage: string) {
   const dir = path.join(srcPath, folder);
-  if (!fs.existsSync(dir)) return;
+  if (!fs.existsSync(dir)) throw new Error(`nenhum diretório encontrado -> ${dir} `);
 
   const files = getFiles(dir).map(f => path.basename(f));
   files.forEach(file => {
@@ -46,7 +46,7 @@ function validateFiles(folder: string, regex: RegExp, errorMessage: string) {
 }
 
 describe('Convenções de Nomenclatura de Arquivos', () => {
-  
+
   describe('src/components/', () => {
     test('Arquivos devem ser PascalCase e .tsx ou .css', () => {
       validateFiles('components', /^[A-Z][a-zA-Z0-9]*\.(tsx|css)$/, 'Erro em components');

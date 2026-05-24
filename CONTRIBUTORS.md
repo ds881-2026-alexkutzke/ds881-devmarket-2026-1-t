@@ -7,7 +7,7 @@ nome, papel no projeto (PO, SM, TL ou DEV), usuário no discord e link do perfil
 EQUIPE A
 
     Bruno Pedron Rupaner, Dev, bruno_pedron, https://github.com/bruno-pedron
-    
+
     Lucas Garzuze Cordeiro, TL, garzuze, https://github.com/garzuze
 
     Pedro Eduardo Dall' Agnol, DEV, nero_515., https://github.com/NeroPRDO
@@ -22,7 +22,7 @@ EQUIPE B
 
     Ana Clara Martins Batista, Dev, anambclara, https://github.com/anambclara
 
-    Clarissa Morita, Dev, cissa, https://github.com/cissamil 
+    Clarissa Morita, Dev, cissa, https://github.com/cissamil
 
     Felyppe Marcelo da Silva, Dev, lyppe1201, https://github.com/felyppe1201
 
@@ -31,7 +31,9 @@ EQUIPE B
     Sabrina Dorigoni Pelentir, SM, sadzpea, https://github.com/sabrina-dp
 
     Maria Fernanda Zandona Casagrande, DEV, maferzc, https://github.com/fe-fe
-    
+
+    Juliano Vidal Silva, Dev, julianoitado, https://github.com/julianoitado
+
 EQUIPE C
 
     Bruna de Lima, Dev, ibrunny, https://github.com/ibrunny
@@ -43,7 +45,7 @@ EQUIPE C
     Matheus José Chaves de Lima, SM, tigrezo.vipo, https://github.com/mateoclima
 
     Peterson Fontinhas, TL, pafontinhas, https://github.com/PAFONTINHAS
-    
+
     Leonardo Alberto, Dev, leonardo_31421, https://github.com/leonardoalberto733
 
     Thiago de lima de assis cordeiro, Dev, thiago-cordeiro, https://github.com/Thiago-cordeiro
