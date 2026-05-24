@@ -7,7 +7,7 @@ type StockBadgeProps = {
 export default function StockBadge({
   stock,
 }: StockBadgeProps) {
-  const inStock = stock > 0;
+  const inStock: string = stock > 0;
 
   return (
     <span className={`stock-badge ${inStock ? 'in-stock' : 'out-of-stock'}`}>
