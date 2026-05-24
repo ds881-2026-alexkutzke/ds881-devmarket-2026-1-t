@@ -60,8 +60,8 @@ describe('Convenções de Nomenclatura de Arquivos', () => {
   });
 
   describe('src/store/', () => {
-    test('Arquivos devem ser camelCase e terminar com Store.ts', () => {
-      validateFiles('store', /^[a-z][a-zA-Z0-9]*Store\.ts$/, 'Erro em store');
+    test('Arquivos devem ser camelCase e terminar com Store.ts ou Store.tsx', () => {
+      validateFiles('store', /^[a-z][a-zA-Z0-9]*Store\.tsx?$/, 'Erro em store');
     });
   });
 
