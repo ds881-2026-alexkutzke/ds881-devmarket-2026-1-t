@@ -1,11 +1,12 @@
-import React from 'react';
 import './styles/StockBadge.css';
 
 type StockBadgeProps = {
   stock: number;
 };
 
-const StockBadge: React.FC<StockBadgeProps> = ({ stock }) => {
+export default function StockBadge({
+  stock,
+}: StockBadgeProps) {
   const inStock = stock > 0;
 
   return (
@@ -15,4 +16,3 @@ const StockBadge: React.FC<StockBadgeProps> = ({ stock }) => {
   );
 };
 
-export default StockBadge;
