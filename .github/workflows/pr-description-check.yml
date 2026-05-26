@@ -6,16 +6,35 @@ on:
 
 jobs:
   check-body-length:
-    name: Verificar tamanho do texto
+    name: Verificar texto e template
     runs-on: ubuntu-latest
     steps:
-      - name: Validar caracteres
+      - name: Validar corpo do PR
         uses: actions/github-script@v7
         with:
           script: |
             const body = context.payload.pull_request.body;
-            if (!body || body.trim().length < 20) {
-              core.setFailed("Erro: A descrição do seu Pull Request está muito curta ou vazia. Por favor, edite o PR e preencha o template corretamente com pelo menos 20 caracteres.");
+            
+            if (!body) {
+              core.setFailed("Erro: A descrição do seu Pull Request está vazia.");
+              return;
+            }
+
+            // Validar Magic Words para fechamento automático de issue
+            const hasMagicWord = /(closes|fixes|resolves)\s+#\d+/i.test(body);
+            
+            // Validar se o usuário não apagou os títulos do template
+            const hasDescricao = /Descrição/i.test(body);
+            const hasOQueFoiFeito = /O que foi feito/i.test(body);
+            const hasChecklist = /Checklist/i.test(body);
+            const hasTemplate = hasDescricao && hasOQueFoiFeito && hasChecklist;
+
+            if (body.trim().length < 20) {
+              core.setFailed("Erro: A descrição do seu Pull Request está muito curta. Por favor, explique melhor o que foi feito (mínimo de 20 caracteres).");
+            } else if (!hasMagicWord) {
+              core.setFailed("Erro: Você esqueceu de vincular a issue! Adicione 'Closes #numero_da_issue' na descrição do seu PR.");
+            } else if (!hasTemplate) {
+              core.setFailed("Erro: O template do PR não foi utilizado corretamente. Certifique-se de manter as seções 'Descrição', 'O que foi feito' e 'Checklist'.");
             } else {
-              console.log("Descrição possui tamanho adequado.");
+              console.log("Descrição validada com sucesso: possui tamanho adequado, vincula uma issue e utiliza o template.");
             }
