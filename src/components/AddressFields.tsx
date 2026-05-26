@@ -6,7 +6,7 @@ type Props = {
     addressInfo: AddressInfo | null
     number: string
     onNumberChange: (value: string) => void
-    numberRef?: RefObject<HTMLInputElement> // <-- Nova propriedade adicionada
+    numberRef?: RefObject<HTMLInputElement | null>
 }
 
 export default function AddressFields({ addressInfo, number, onNumberChange, numberRef}: Props) {
