@@ -1,3 +1,4 @@
+import type { RefObject } from "react";
 import type { AddressInfo } from "../types/checkout.types"
 import './styles/AddressFields.css';
 
@@ -5,11 +6,13 @@ type Props = {
     addressInfo: AddressInfo | null
     number: string
     onNumberChange: (value: string) => void
+    numberRef?: RefObject<HTMLInputElement> // <-- Nova propriedade adicionada
 }
 
-export default function AddressFields({ addressInfo, number, onNumberChange}: Props) {
+export default function AddressFields({ addressInfo, number, onNumberChange, numberRef}: Props) {
   return (
     <div className="container">
+      {/* ... (os outros campos continuam iguais) ... */}
       <div>
         <label htmlFor="street">Logradouro</label>
         <input
@@ -66,9 +69,9 @@ export default function AddressFields({ addressInfo, number, onNumberChange}: Pr
           value={number}
           onChange={(e) => onNumberChange(e.target.value)}
           placeholder="Digite o número"
+          ref={numberRef} // <-- Ref conectada ao input
         />
       </div>
     </div>
   )
 }
-
