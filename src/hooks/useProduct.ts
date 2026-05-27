@@ -1,34 +1,58 @@
-import { useState, useEffect } from 'react';
+import { useReducer, useEffect } from 'react';
 import { fetchProductById } from '../services/productService';
 import type { Product } from '../types/product.types';
 
-export const useProduct = (id: number): { product: Product | null; loading: boolean; error: string | null } => {
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+type State = {
+  product: Product | null;
+  loading: boolean;
+  error: string | null;
+};
+
+type Action =
+  | { type: 'FETCH_START' }
+  | { type: 'FETCH_SUCCESS'; payload: Product }
+  | { type: 'FETCH_ERROR'; payload: string };
+
+const initialState: State = {
+  product: null,
+  loading: true,
+  error: null,
+};
+
+const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case 'FETCH_START':
+      return { product: null, loading: true, error: null };
+    case 'FETCH_SUCCESS':
+      return { product: action.payload, loading: false, error: null };
+    case 'FETCH_ERROR':
+      return { product: null, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const useProduct = (id: number): State => {
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    setLoading(true);
-    setError(null);
-    setProduct(null);
+    dispatch({ type: 'FETCH_START' });
 
     const loadProduct = async () => {
       try {
         const data = await fetchProductById(id);
         if (data === null) {
-          setError('Produto não encontrado');
+          dispatch({ type: 'FETCH_ERROR', payload: 'Produto não encontrado' });
         } else {
-          setProduct(data);
+          dispatch({ type: 'FETCH_SUCCESS', payload: data });
         }
       } catch {
-        setError('Erro ao carregar produto');
-      } finally {
-        setLoading(false);
+        dispatch({ type: 'FETCH_ERROR', payload: 'Erro ao carregar produto' });
       }
     };
 
     loadProduct();
   }, [id]);
 
-  return { product, loading, error };
+  return state;
 };
