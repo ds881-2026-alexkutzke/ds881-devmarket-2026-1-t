@@ -1,22 +1,34 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useProduct } from "../hooks/useProduct";
 import { useCart } from "../store/cartStore";
+import { fetchBRLConversionRate } from "../services/exchangeRateService";
+import { formatBRL } from "../utils/formatCurrency";
 import type { Product } from "../types/product.types";
 import "./styles/ProductPage.css";
 
 export default function ProductPage() {
-
   const { id } = useParams<{ id: string }>();
-  
   const { product, loading, error } = useProduct(Number(id));
-  
   const { state, dispatch } = useCart();
+  
+  const [exchangeRate, setExchangeRate] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetchBRLConversionRate().then((rate) => {
+      setExchangeRate(rate);
+    });
+  }, []);
 
   if (loading) {
     return <div className="loading">Carregando produto...</div>;
-  } if (error) {
+  }
+
+  if (error) {
     return <div className="error">Erro: {error}</div>;
-  } if (!product) {
+  }
+
+  if (!product) {
     return <div className="not-found">Produto não encontrado.</div>;
   }
 
@@ -28,19 +40,30 @@ export default function ProductPage() {
 
   const addToCart = (currentProduct: Product) => {
     if (isOutOfStock) return;
+
     dispatch({
       type: "ADD_ITEM",
       payload: {
         product: currentProduct,
-        quantity: 1, 
+        quantity: 1,
       },
     });
+  };
+
+  const renderPrice = () => {
+    if (exchangeRate !== null) {
+      return formatBRL(product.price, exchangeRate);
+    }
+    
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(product.price);
   };
 
   return (
     <div className="product-detail-container">
       <div className="product-detail-content">
-        
         
         <div className="product-image-section">
           <img 
@@ -50,7 +73,6 @@ export default function ProductPage() {
           />
         </div>
         
-       
         <div className="product-info-section">
           <h1>{product.title}</h1>
           <p className="brand"><strong>Marca:</strong> {product.brand}</p>
@@ -59,7 +81,7 @@ export default function ProductPage() {
           
           <div className="price-container">
             <span className="price">
-              R$ {product.price.toFixed(2)}
+              {renderPrice()}
             </span>
           </div>
           
