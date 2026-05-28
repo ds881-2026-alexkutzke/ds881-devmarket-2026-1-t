@@ -3,7 +3,7 @@ import { CartProvider } from "./store/cartStore";
 import { routes } from "./routes";
 import Layout from "./components/Layout";
 
-function App() {
+export default function App() {
   return (
     <CartProvider>
       <BrowserRouter>
@@ -24,5 +24,3 @@ function App() {
     </CartProvider>
   );
 }
-
-export default App;
