@@ -44,8 +44,12 @@ describe("useProduct - Regras de Negócio do Reducer", () => {
     price: 99.9,
     description: "Descrição de teste",
     category: "Eletrônicos",
-    images: ["image.png"], // Corrigido para 'images' (plural e array) conforme o contrato de tipos
+    images: ["image.png"],
     rating: 4.5,
+    discountPercentage: 10, 
+    stock: 50,             
+    brand: "Marca de Teste", 
+    thumbnail: "thumb.png",  
   };
 
   beforeEach(() => {
