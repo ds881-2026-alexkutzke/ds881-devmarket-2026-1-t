@@ -1,0 +1,33 @@
+.product-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.product-rating__star {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.product-rating__star--filled {
+  color: #f59e0b;
+}
+
+.product-rating__star--empty {
+  color: var(--border);
+}
+
+.product-rating__star--half {
+  background: linear-gradient(90deg, #f59e0b 50%, var(--border) 50%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.product-rating__value {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  margin-left: 6px;
+}
