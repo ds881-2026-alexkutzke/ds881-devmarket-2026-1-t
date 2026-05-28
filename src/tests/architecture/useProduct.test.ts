@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { Product } from "../../types/product.types";
 
-
+// Força o mock do serviço de produtos para isolar o teste do hook
 vi.mock("../../services/productService", () => ({
   fetchProductById: vi.fn(),
 }));
@@ -17,7 +17,7 @@ interface MockAction {
   payload?: Product | string;
 }
 
-
+// Mock dos estados simulando o reducer interno do hook
 const mockInitialState: MockState = {
   product: null,
   loading: true,
@@ -44,8 +44,8 @@ describe("useProduct - Regras de Negócio do Reducer", () => {
     price: 99.9,
     description: "Descrição de teste",
     category: "Eletrônicos",
-    image: "image.png",
-    rating: 4.5, 
+    images: ["image.png"], // Corrigido para 'images' (plural e array) conforme o contrato de tipos
+    rating: 4.5,
   };
 
   beforeEach(() => {
