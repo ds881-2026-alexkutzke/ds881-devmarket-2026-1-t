@@ -13,8 +13,8 @@ export function useCep() {
     try {
       const data = await fetchCep(cep);
       setAddress(data);
-    } catch (err: any) {
-      setError(err.message || 'Erro ao buscar o CEP');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro ao buscar o CEP');
       setAddress(null);
     } finally {
       setLoading(false);
