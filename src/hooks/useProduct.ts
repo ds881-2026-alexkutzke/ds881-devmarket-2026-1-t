@@ -2,24 +2,24 @@ import { useReducer, useEffect } from "react";
 import { fetchProductById } from "../services/productService";
 import type { Product } from "../types/product.types";
 
-export type ProductState = {
+type ProductState = {
   product: Product | null;
   loading: boolean;
   error: string | null;
 };
 
-export type ProductAction =
+type ProductAction =
   | { type: "FETCH_START" }
   | { type: "FETCH_SUCCESS"; payload: Product }
   | { type: "FETCH_ERROR"; payload: string };
 
-export const initialState: ProductState = {
+const initialState: ProductState = {
   product: null,
   loading: true,
   error: null,
 };
 
-export const productReducer = (state: ProductState, action: ProductAction): ProductState => {
+const productReducer = (state: ProductState, action: ProductAction): ProductState => {
   switch (action.type) {
     case "FETCH_START":
       return { product: null, loading: true, error: null };
