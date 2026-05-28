@@ -4,20 +4,29 @@ import { useProduct } from "../hooks/useProduct";
 import { useCart } from "../store/cartStore";
 import { fetchBRLConversionRate } from "../services/exchangeRateService";
 import { formatBRL } from "../utils/formatCurrency";
-import type { Product } from "../types/product.types";
 import "./styles/ProductPage.css";
 
 export default function ProductPage() {
   const { id } = useParams<{ id: string }>();
   const { product, loading, error } = useProduct(Number(id));
-  const { state, dispatch } = useCart();
+  const { state, addToCart } = useCart();
   
   const [exchangeRate, setExchangeRate] = useState<number | null>(null);
 
   useEffect(() => {
-    fetchBRLConversionRate().then((rate) => {
-      setExchangeRate(rate);
-    });
+    let mounted = true;
+    
+    fetchBRLConversionRate()
+      .then((rate) => {
+        if (mounted) setExchangeRate(rate);
+      })
+      .catch(() => {
+        if (mounted) setExchangeRate(null);
+      });
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   if (loading) {
@@ -38,16 +47,9 @@ export default function ProductPage() {
 
   const isOutOfStock = product.stock === 0 || totalInCart >= product.stock;
 
-  const addToCart = (currentProduct: Product) => {
+  const handleAddToCart = () => {
     if (isOutOfStock) return;
-
-    dispatch({
-      type: "ADD_ITEM",
-      payload: {
-        product: currentProduct,
-        quantity: 1,
-      },
-    });
+    addToCart(product);
   };
 
   const renderPrice = () => {
@@ -65,6 +67,7 @@ export default function ProductPage() {
     <div className="product-detail-container">
       <div className="product-detail-content">
         
+        {/* Galeria / Imagem do Produto */}
         <div className="product-image-section">
           <img 
             src={product.thumbnail} 
@@ -92,7 +95,7 @@ export default function ProductPage() {
           </p>
 
           <button
-            onClick={() => addToCart(product)}
+            onClick={handleAddToCart}
             disabled={isOutOfStock}
             className={`add-to-cart-btn ${isOutOfStock ? "disabled" : ""}`}
           >
