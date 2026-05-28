@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { fetchUsdToBrl } from '../services/exchangeRateService';
+import { fetchBRLConversionRate } from '../services/exchangeRateService';
 
 type ExchangeRateState = {
   rate: number | null;
@@ -23,7 +23,7 @@ export function useExchangeRate(): ExchangeRateState {
       setError(null);
 
       try {
-        const data = await fetchUsdToBrl();
+        const data = await fetchBRLConversionRate();
 
         if (!ignore) {
           setRate(data);
