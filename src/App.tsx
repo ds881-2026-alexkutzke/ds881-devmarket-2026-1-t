@@ -1,16 +1,25 @@
-import { BrowserRouter, useRoutes } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "./store/cartStore";
 import { routes } from "./routes";
-
-function AppRoutes() {
-  return useRoutes(routes);
-}
+import Layout from "./components/Layout";
 
 function App() {
   return (
     <CartProvider>
       <BrowserRouter>
-        <AppRoutes />
+        <Layout>
+          <Routes>
+            {
+              routes.map((route, index) =>(
+                <Route 
+                  key={index}
+                  path={route.path}
+                  element={route.element}
+                />
+              ))
+            }
+          </Routes>
+        </Layout>
       </BrowserRouter>
     </CartProvider>
   );
