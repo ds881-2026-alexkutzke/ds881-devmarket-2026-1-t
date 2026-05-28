@@ -1,0 +1,7 @@
+.checkout-page { padding: 16px; }
+.checkout-section { display: grid; gap: 12px; max-width: 900px; }
+.buyer-form { display: flex; gap: 8px; flex-wrap: wrap; }
+.cep-row { display: flex; gap: 8px; align-items: center; }
+.cart-item { display: flex; justify-content: space-between; }
+.subtotal { margin-top: 8px; }
+.error { color: red; }

@@ -6,6 +6,7 @@ import { fetchBRLConversionRate } from "../services/exchangeRateService";
 import { formatBRL } from "../utils/formatCurrency";
 import type { AddressInfo, BuyerInfo } from "../types/checkout.types";
 import { useCart } from "../store/cartStore";
+import './styles/CheckoutPage.css';
 
 export default function CheckoutPage() {
   const { state } = useCart();
@@ -40,9 +41,10 @@ export default function CheckoutPage() {
     try {
       const address = await fetchAddressByCep(foundCep);
       setAddressInfo(address);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setAddressInfo(null);
-      setCepError(err?.message || "Erro ao buscar CEP");
+      const message = err instanceof Error ? err.message : "Erro ao buscar CEP";
+      setCepError(message);
     } finally {
       setCepLoading(false);
     }
@@ -56,13 +58,13 @@ export default function CheckoutPage() {
   const totalBRL = rate ? formatBRL(subtotalUSD, rate) : null;
 
   return (
-    <main style={{ padding: 16 }}>
+    <main className="checkout-page">
       <h1>Checkout</h1>
 
-      <section style={{ display: "grid", gap: 12, maxWidth: 900 }}>
+      <section className="checkout-section">
         <div>
           <h2>Dados do comprador</h2>
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <div className="buyer-form">
             <input
               placeholder="Nome"
               value={buyer.name}
@@ -84,10 +86,10 @@ export default function CheckoutPage() {
 
         <div>
           <h2>Endereço</h2>
-          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <div className="cep-row">
             <CepInput value={cep} onChange={setCep} onCepComplete={handleCepComplete} />
             {cepLoading && <span>Buscando CEP...</span>}
-            {cepError && <span style={{ color: "red" }}>{cepError}</span>}
+            {cepError && <span className="error">{cepError}</span>}
           </div>
 
           <AddressFields addressInfo={addressInfo} number={number} onNumberChange={setNumber} />
@@ -98,7 +100,7 @@ export default function CheckoutPage() {
           <div>
             {state.items.length === 0 && <p>Seu carrinho está vazio</p>}
             {state.items.map((item) => (
-              <div key={item.product.id} style={{ display: "flex", justifyContent: "space-between" }}>
+              <div key={item.product.id} className="cart-item">
                 <div>
                   <strong>{item.product.title}</strong>
                   <div>Quantidade: {item.quantity}</div>
@@ -107,7 +109,7 @@ export default function CheckoutPage() {
               </div>
             ))}
 
-            <div style={{ marginTop: 8 }}>
+            <div className="subtotal">
               <strong>Subtotal:</strong> {subtotalUSD.toFixed(2)} USD {rate ? `· ${totalBRL}` : ""}
             </div>
           </div>
