@@ -10,36 +10,20 @@ type CheckoutPaymentButtonProps = {
   addressNumber: string;
 };
 
-function onlyDigits(value: string): string {
-  return value.replace(/\D/g, "");
-}
-
-function isCheckoutPaymentDataValid({
-  fullName,
-  email,
-  cpf,
-  cep,
-  addressNumber,
-}: CheckoutPaymentButtonProps): boolean {
-  const trimmedName = fullName.trim();
-  const trimmedEmail = email.trim();
-  const trimmedAddressNumber = addressNumber.trim();
-  const cpfDigits = onlyDigits(cpf);
-  const cepDigits = onlyDigits(cep);
-
-  return (
+export default function CheckoutPaymentButton(props: CheckoutPaymentButtonProps) {
+  const navigate = useNavigate();
+  const trimmedName = props.fullName.trim();
+  const trimmedEmail = props.email.trim();
+  const trimmedAddressNumber = props.addressNumber.trim();
+  const cpfDigits = props.cpf.replace(/\D/g, "");
+  const cepDigits = props.cep.replace(/\D/g, "");
+  const isFormValid =
     trimmedName.length > 0 &&
     trimmedEmail.length > 0 &&
     trimmedEmail.includes("@") &&
     cpfDigits.length >= 11 &&
     cepDigits.length === 8 &&
-    trimmedAddressNumber.length > 0
-  );
-}
-
-export default function CheckoutPaymentButton(props: CheckoutPaymentButtonProps) {
-  const navigate = useNavigate();
-  const isFormValid = isCheckoutPaymentDataValid(props);
+    trimmedAddressNumber.length > 0;
 
   function handleClick() {
     if (isFormValid) {
