@@ -12,11 +12,10 @@ type Props = {
 export default function AddressFields({ addressInfo, number, onNumberChange, numberRef}: Props) {
   return (
     <div className="container">
-      {/* ... (os outros campos continuam iguais) ... */}
       <div>
-        <label htmlFor="logradouro">Logradouro</label> {/* <-- Corrigido para logradouro */}
+        <label htmlFor="logradouro">Logradouro</label>
         <input
-          type="text" {/* <-- Corrigido para text */}
+          type="text"
           id="logradouro"
           value={addressInfo?.street || ''}
           readOnly
