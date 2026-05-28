@@ -14,9 +14,9 @@ export default function AddressFields({ addressInfo, number, onNumberChange, num
     <div className="container">
       {/* ... (os outros campos continuam iguais) ... */}
       <div>
-        <label htmlFor="street">Logradouro</label>
+        <label htmlFor="logradouro">Logradouro</label> {/* <-- Corrigido para logradouro */}
         <input
-          type="street"
+          type="text" {/* <-- Corrigido para text */}
           id="logradouro"
           value={addressInfo?.street || ''}
           readOnly
