@@ -1,5 +1,6 @@
 import type { Product } from "../types/product.types";
 import ProductCard from "./ProductCard";
+import './styles/ProductGrid.css';
 
 type ProductGridProps = {
   products: Product[];
@@ -7,10 +8,13 @@ type ProductGridProps = {
 
 export default function ProductGrid({ products }: ProductGridProps) {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
-      ))}
+    <div className="product-grid">
+      {products.length > 0 
+        ? products.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))
+        : <p className="product-grid__empty">Nenhum produto disponível no momento.</p>
+      }
     </div>
   );
 }
