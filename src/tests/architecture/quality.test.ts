@@ -40,7 +40,7 @@ function getLine(content: string, index: number): number {
 }
 
 function getFiles(dir: string, extensions: Set<string>, excludeTests = false): string[] {
-  if (!fs.existsSync(dir)) return [];
+  if (!fs.existsSync(dir)) throw new Error(`nenhum diretório encontrado -> ${dir} `);
 
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const entryPath = path.join(dir, entry.name);
@@ -78,11 +78,11 @@ function resolveImport(fromFile: string, importPath: string, knownFiles: Set<str
     const aliasCandidates = path.extname(aliasPath)
       ? [aliasPath]
       : [
-          `${aliasPath}.ts`,
-          `${aliasPath}.tsx`,
-          path.join(aliasPath, 'index.ts'),
-          path.join(aliasPath, 'index.tsx'),
-        ];
+        `${aliasPath}.ts`,
+        `${aliasPath}.tsx`,
+        path.join(aliasPath, 'index.ts'),
+        path.join(aliasPath, 'index.tsx'),
+      ];
 
     return aliasCandidates.find((candidate) => knownFiles.has(candidate)) ?? null;
   }
@@ -93,11 +93,11 @@ function resolveImport(fromFile: string, importPath: string, knownFiles: Set<str
   const candidates = path.extname(basePath)
     ? [basePath]
     : [
-        `${basePath}.ts`,
-        `${basePath}.tsx`,
-        path.join(basePath, 'index.ts'),
-        path.join(basePath, 'index.tsx'),
-      ];
+      `${basePath}.ts`,
+      `${basePath}.tsx`,
+      path.join(basePath, 'index.ts'),
+      path.join(basePath, 'index.tsx'),
+    ];
 
   return candidates.find((candidate) => knownFiles.has(candidate)) ?? null;
 }

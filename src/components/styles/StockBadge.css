@@ -1,0 +1,17 @@
+.stock-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.stock-badge.in-stock {
+  background-color: #16a34a;
+}
+
+.stock-badge.out-of-stock {
+  background-color: #ef4444;
+}

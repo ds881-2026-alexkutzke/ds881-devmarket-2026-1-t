@@ -1,4 +1,5 @@
 import { BrowserRouter, useRoutes } from "react-router-dom";
+import { CartProvider } from "./store/cartStore";
 import { routes } from "./routes";
 
 function AppRoutes() {
@@ -7,9 +8,11 @@ function AppRoutes() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
+    <CartProvider>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </CartProvider>
   );
 }
 

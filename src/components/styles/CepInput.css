@@ -1,0 +1,45 @@
+.cep-input {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 8px 0;
+}
+
+.cep-input__field {
+  width: 100%;
+  max-width: 96px;
+  padding: 10px 14px;
+
+  font-family: var(--sans);
+  font-variant-numeric: tabular-nums;
+  font-size: 18px;
+  font-weight: 400;
+
+  border-radius: 16px;
+  border: 1.5px solid var(--border);
+
+  background: transparent;
+  color: var(--text);
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.cep-input__field::placeholder {
+  color: var(--text);
+  opacity: 0.5;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.cep-input__field:hover {
+  border-color: var(--accent-border);
+}
+
+.cep-input__field:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(170, 59, 255, 0.2);
+}
