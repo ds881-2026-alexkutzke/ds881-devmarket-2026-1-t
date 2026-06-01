@@ -1,11 +1,11 @@
 import { FiShoppingCart } from "react-icons/fi";
 import "./styles/Header.css";
+import { useCart } from "../store/cartStore";
 
-interface HeaderProps {
-  cartCount?: number;
-}
+export default function Header() {
+  const { state } = useCart();
+  const cartCount = state.items.reduce((acc, item) => acc + item.quantity, 0);
 
-export default function Header({ cartCount = 0 }: HeaderProps) {
   return (
     <header className="header">
       <span className="header__logo">DevMarket</span>
