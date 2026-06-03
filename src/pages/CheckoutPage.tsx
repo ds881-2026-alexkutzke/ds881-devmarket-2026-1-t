@@ -1,10 +1,17 @@
 import { useState, useRef } from 'react';
+import BuyerForm from '../components/BuyerForm';
 import CepInput from '../components/CepInput';
 import AddressFields from '../components/AddressFields';
-import type { AddressInfo } from '../types/checkout.types';
+import CheckoutPaymentButton from '../components/CheckoutPaymentButton';
+import type { AddressInfo, BuyerInfo } from '../types/checkout.types';
 import { fetchAddressByCep } from '../services/cepService';
 
 export default function CheckoutPage() {
+  const [buyerInfo, setBuyerInfo] = useState<BuyerInfo>({
+    name: '',
+    email: '',
+    cpf: '',
+  });
   const [cep, setCep] = useState('');
   const [number, setNumber] = useState('');
   const [addressInfo, setAddressInfo] = useState<AddressInfo | null>(null);
@@ -30,9 +37,29 @@ export default function CheckoutPage() {
     }
   };
 
+  const handleBuyerChange = (field: keyof BuyerInfo, value: string) => {
+    setBuyerInfo((currentBuyerInfo) => ({
+      ...currentBuyerInfo,
+      [field]: value,
+    }));
+  };
+
+  const isCheckoutFormValid =
+    buyerInfo.name.trim().length > 0 &&
+    buyerInfo.email.trim().includes('@') &&
+    buyerInfo.cpf.replace(/\D/g, '').length === 11 &&
+    cep.replace(/\D/g, '').length === 8 &&
+    number.trim().length > 0;
+
   return (
     <div>
       <h1>Checkout</h1>
+      <BuyerForm
+        name={buyerInfo.name}
+        email={buyerInfo.email}
+        cpf={buyerInfo.cpf}
+        onChange={handleBuyerChange}
+      />
       <CepInput
         value={cep}
         onChange={setCep}
@@ -44,6 +71,7 @@ export default function CheckoutPage() {
         onNumberChange={setNumber}
         numberRef={numberInputRef}
       />
+      <CheckoutPaymentButton isValid={isCheckoutFormValid} />
     </div>
   );
 }
