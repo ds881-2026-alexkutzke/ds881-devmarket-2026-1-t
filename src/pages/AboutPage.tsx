@@ -58,6 +58,35 @@ export default function AboutPage() {
           ))}
         </ul>
       </section>
+       className="pagina-sobre__secao">
+        <h2>Contato</h2>
+        <p>
+          E-mail para contato: devmarket.ufpr@gmail.com
+        </p>
+      </section>
+
+            </section>
+
+      <section className="pagina-sobre__secao">
+        <h2>Contato</h2>
+        <p>
+          E-mail para contato: devmarket.ufpr@gmail.com
+        </p>
+      </section>
+
+      <section className="pagina-sobre__secao">
+        <h2>Créditos</h2>
+        <p>
+          Projeto desenvolvido colaborativamente pelos alunos da disciplina
+          DS881 - DevOps da Universidade Federal do Paraná (UFPR).
+        </p>
+
+        <ul className="pagina-sobre__lista-tecnologias">
+          <li>Gabriela Harres</li>
+          <li>Equipe DevMarket</li>
+        </ul>
+      </section>
+
     </div>
   );
 }
