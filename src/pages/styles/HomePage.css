@@ -6,6 +6,37 @@
 }
 
 .home-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+  padding: 2rem 0;
+}
+
+.home-header .title {
+  font-size: 3rem;
+  font-weight: 800;
+  /* color: #111827;  */
+  color: lightcyan; 
+  letter-spacing: -0.05em;
+  margin-bottom: 1rem;
+}
+
+/* A mágica do gradiente no texto */
+.home-header .highlight {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6); 
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Subtítulo mais elegante */
+.home-header .subtitle {
+  font-size: 1.125rem;
+  color: #4b5563;
+  max-width: 600px; 
+  margin: 0 auto 2.5rem auto; 
+  line-height: 1.6;
+}
+
+.home-header {
   margin-bottom: 2.5rem;
   text-align: center;
 }

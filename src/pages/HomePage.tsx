@@ -1,49 +1,49 @@
-import { useState, useMemo } from 'react';
-// Ajuste os caminhos abaixo conforme a sua estrutura de pastas
-import { useProducts } from '../hooks/useProduct'; 
-import { useCategories } from '../hooks/useCategories';
-import SearchBar from '../components/SearchBar';
-import CategoryFilter from '../components/CategoryFilter';
-import ProductGrid from '../components/ProductGrid';
-
 import './styles/HomePage.css';
+import { useState, useMemo } from 'react';
+import SearchBar from '../components/SearchBar';
+import { useProducts } from '../hooks/useProducts';
+import ProductGrid from '../components/ProductGrid';
+import { useCategories } from '../hooks/useCategories';
+import CategoryFilter from '../components/CategoryFilter';
 
-const HomePage = () => {
-  // Consumindo os hooks da camada de negócio em vez de chamar os services diretamente
+export default function HomePage() {
   const { products, loading: productsLoading } = useProducts();
   const { categories, loading: categoriesLoading } = useCategories();
 
-  // Estados locais para controlar os filtros
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>('Todos');
 
-  // Lógica de filtragem: memorizamos o resultado para não recalcular à toa a cada render
   const filteredProducts = useMemo(() => {
     if (!products) return [];
-    
+
     return products.filter((product) => {
       const matchSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchCategory = selectedCategory === 'Todos' || product.category === selectedCategory;
-      
+      const matchCategory = !selectedCategory || selectedCategory === 'Todos' || product.category === selectedCategory;
+
       return matchSearch && matchCategory;
     });
   }, [products, searchTerm, selectedCategory]);
 
+
   return (
     <main className="home-container">
       <header className="home-header">
-        <h1>Vitrine DevMarket</h1>
-        <p>Encontre os melhores produtos aqui.</p>
-        
+        <h1 className="title">
+          Vitrine <span className="highlight">DevMarket</span>
+        </h1>
+        <p className="subtitle">
+          Explore nossa coleção e encontre as melhores ferramentas para o seu próximo projeto.
+        </p>
+
         <div className="filters-bar">
-          <SearchBar 
-            searchTerm={searchTerm} 
-            onSearchChange={setSearchTerm} 
+          <SearchBar
+            value={searchTerm}
+            onChange={setSearchTerm}
           />
-          <CategoryFilter 
-            categories={categories} 
-            selectedCategory={selectedCategory} 
-            onCategoryChange={setSelectedCategory} 
+          <CategoryFilter
+            categories={categories}
+            selected={selectedCategory}
+            onSelect={setSelectedCategory}
           />
         </div>
       </header>
@@ -58,5 +58,3 @@ const HomePage = () => {
     </main>
   );
 };
-
-export default HomePage;
