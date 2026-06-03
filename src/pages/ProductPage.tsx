@@ -1,3 +1,109 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useProduct } from "../hooks/useProduct";
+import { useCart } from "../store/cartStore";
+import { fetchBRLConversionRate } from "../services/exchangeRateService";
+import { formatBRL } from "../utils/formatCurrency";
+import "./styles/ProductPage.css";
+
 export default function ProductPage() {
-  return <h1>Produto</h1>;
+  const { id } = useParams<{ id: string }>();
+  const { product, loading, error } = useProduct(Number(id));
+  const { state, addToCart } = useCart();
+  
+  const [exchangeRate, setExchangeRate] = useState<number | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    
+    fetchBRLConversionRate()
+      .then((rate) => {
+        if (mounted) setExchangeRate(rate);
+      })
+      .catch(() => {
+        if (mounted) setExchangeRate(null);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  if (loading) {
+    return <div className="loading">Carregando produto...</div>;
+  }
+
+  if (error) {
+    return <div className="error">Erro: {error}</div>;
+  }
+
+  if (!product) {
+    return <div className="not-found">Produto não encontrado.</div>;
+  }
+
+  const totalInCart = state.items
+    .filter((item) => item.product.id === product.id)
+    .reduce((sum, item) => sum + item.quantity, 0);
+
+  const isOutOfStock = product.stock === 0 || totalInCart >= product.stock;
+
+  const handleAddToCart = () => {
+    if (isOutOfStock) return;
+    addToCart(product);
+  };
+
+  const renderPrice = () => {
+    if (exchangeRate !== null) {
+      return formatBRL(product.price, exchangeRate);
+    }
+    
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(product.price);
+  };
+
+  return (
+    <div className="product-detail-container">
+      <div className="product-detail-content">
+        
+        {/* Galeria / Imagem do Produto */}
+        <div className="product-image-section">
+          <img 
+            src={product.thumbnail} 
+            alt={product.title} 
+            className="product-thumbnail-image"
+          />
+        </div>
+        
+        <div className="product-info-section">
+          <h1>{product.title}</h1>
+          <p className="brand"><strong>Marca:</strong> {product.brand}</p>
+          <p className="category"><strong>Categoria:</strong> {product.category}</p>
+          <p className="description">{product.description}</p>
+          
+          <div className="price-container">
+            <span className="price">
+              {renderPrice()}
+            </span>
+          </div>
+          
+          <p className={`stock-status ${isOutOfStock ? "out-of-stock" : "in-stock"}`}>
+            {product.stock === 0 
+              ? "Esgotado de momento" 
+              : `Disponível em stock: ${product.stock - totalInCart} unidade(s)`}
+          </p>
+
+          <button
+            onClick={handleAddToCart}
+            disabled={isOutOfStock}
+            className={`add-to-cart-btn ${isOutOfStock ? "disabled" : ""}`}
+          >
+            {isOutOfStock ? "Produto sem estoque" : "Adicionar ao Carrinho"}
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
 }

@@ -2,24 +2,24 @@ import { useReducer, useEffect } from "react";
 import { fetchProductById } from "../services/productService";
 import type { Product } from "../types/product.types";
 
-type State = {
+type ProductState = {
   product: Product | null;
   loading: boolean;
   error: string | null;
 };
 
-type Action =
+type ProductAction =
   | { type: "FETCH_START" }
   | { type: "FETCH_SUCCESS"; payload: Product }
   | { type: "FETCH_ERROR"; payload: string };
 
-const initialState: State = {
+const initialState: ProductState = {
   product: null,
   loading: true,
   error: null,
 };
 
-const reducer = (state: State, action: Action): State => {
+const productReducer = (state: ProductState, action: ProductAction): ProductState => {
   switch (action.type) {
     case "FETCH_START":
       return { product: null, loading: true, error: null };
@@ -32,8 +32,8 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-export const useProduct = (id: number): State => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+export const useProduct = (id: number): ProductState => {
+  const [state, dispatch] = useReducer(productReducer, initialState);
 
   useEffect(() => {
     let ignore = false;
