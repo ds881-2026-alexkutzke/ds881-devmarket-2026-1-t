@@ -100,7 +100,6 @@ jobs:
           key: ${{ runner.os }}-vite-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-vite-
-            
 
       - name: Build application
         run: npm run build

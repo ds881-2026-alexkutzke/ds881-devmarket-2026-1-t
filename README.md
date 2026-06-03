@@ -39,4 +39,3 @@
 * Proibido CSS inline (estilize usando arquivos .css ou .tsx).
 * Componentes não podem fazer chamadas diretas com `fetch()` ou `axios`. Chamadas devem ficar em `services/`.
 
-teste
