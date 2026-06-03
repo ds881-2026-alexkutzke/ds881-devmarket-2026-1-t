@@ -1,0 +1,85 @@
+.pagina-sobre {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 48px 32px 64px;
+  text-align: left;
+}
+
+.pagina-sobre__destaque {
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+.pagina-sobre__rotulo {
+  margin-bottom: 12px;
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pagina-sobre h1 {
+  margin: 0 0 20px;
+}
+
+.pagina-sobre__introducao {
+  max-width: 760px;
+  color: var(--text);
+  font-size: 1.12rem;
+  line-height: 1.65;
+}
+
+.pagina-sobre__secao {
+  padding: 32px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.pagina-sobre__secao:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.pagina-sobre__secao p {
+  max-width: 780px;
+  color: var(--text);
+  line-height: 1.65;
+}
+
+.pagina-sobre__lista-tecnologias {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pagina-sobre__item-tecnologia {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: var(--text-h);
+  background: var(--social-bg);
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .pagina-sobre {
+    padding: 32px 20px 48px;
+  }
+
+  .pagina-sobre__destaque {
+    padding-bottom: 24px;
+  }
+
+  .pagina-sobre__secao {
+    padding: 24px 0;
+  }
+
+  .pagina-sobre__introducao {
+    font-size: 1rem;
+  }
+}
