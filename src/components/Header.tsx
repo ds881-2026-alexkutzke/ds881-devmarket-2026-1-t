@@ -4,7 +4,7 @@ import "./styles/Header.css";
 import { useCart } from "../hooks/useCart";
 
 export default function Header() {
-  const { items } = useCart();
+  const { state: { items } } = useCart();
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
   return (

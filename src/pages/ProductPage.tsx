@@ -9,7 +9,7 @@ import "./styles/ProductPage.css";
 export default function ProductPage() {
   const { id } = useParams<{ id: string }>();
   const { product, loading, error } = useProduct(Number(id));
-  const { items, addToCart } = useCart();
+  const { state: { items }, addToCart } = useCart();
   
   const [exchangeRate, setExchangeRate] = useState<number | null>(null);
 
