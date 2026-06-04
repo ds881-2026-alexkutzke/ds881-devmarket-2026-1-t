@@ -17,6 +17,13 @@ type CartAction =
     }
   | { type: "CLEAR_CART" };
 
+type CartContextValue = {
+  state: CartState;
+  dispatch: Dispatch<CartAction>;
+  addToCart: (product: Product) => void;
+  removeFromCart: (productId: number) => void;
+};
+
 type CartProviderProps = {
   children: ReactNode;
 };
@@ -164,6 +171,10 @@ export function CartProvider({
     },
     []
   );
+
+  const removeFromCart = useCallback((productId: number) => {
+    dispatch({ type: "REMOVE_ITEM", payload: { id: productId } });
+  }, []);
 
   return (
     <CartContext.Provider

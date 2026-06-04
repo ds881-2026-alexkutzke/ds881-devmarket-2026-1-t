@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import type { Product } from '../types/product.types';
 import './styles/ProductCard.css';
 import { useCart } from "../hooks/useCart";
@@ -33,14 +34,15 @@ export default function ProductCard({ product, conversionRate }: ProductCardProp
 
   return (
     <article className="product-card">
-      <div className="product-card-image-wrapper">
-        <img 
-          src={product.thumbnail || 'https://via.placeholder.com/150'} 
-          alt={`Imagem de ${product.title || 'Produto'}`} 
-          className="product-card-thumbnail" 
-          loading="lazy" 
-        />
-      </div>
+      <Link to={`produto/${product.id}`}>
+        <div className="product-card-image-wrapper">
+          <img 
+            src={product.thumbnail || 'https://via.placeholder.com/150'} 
+            alt={`Imagem de ${product.title || 'Produto'}`} 
+            className="product-card-thumbnail" 
+            loading="lazy" 
+            />
+        </div>
 
       <div className="product-card-content">
         <h3 className="product-card-title" title={product.title || ''}>
