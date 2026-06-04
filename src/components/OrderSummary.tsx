@@ -1,4 +1,4 @@
-import type { CartItem } from '../types/cart.types';
+﻿import type { CartItem } from '../types/cart.types';
 import { formatBRL } from '../utils/formatCurrency';
 import './styles/OrderSummary.css';
 
@@ -40,4 +40,3 @@ export default function OrderSummary({ items, rate }: OrderSummaryProps) {
     </section>
   );
 }
-
