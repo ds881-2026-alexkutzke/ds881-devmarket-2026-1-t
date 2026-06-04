@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CepInput from "../components/CepInput";
 import AddressFields from "../components/AddressFields";
-import { fetchAddressByCep } from "../services/cepService";
+import { useCep } from "../hooks/useCep";
 import { fetchBRLConversionRate } from "../services/exchangeRateService";
 import { formatBRL } from "../utils/formatCurrency";
-import type { AddressInfo, BuyerInfo } from "../types/checkout.types";
+import type { BuyerInfo } from "../types/checkout.types";
 import { useCart } from "../store/cartStore";
 import './styles/CheckoutPage.css';
 
@@ -14,20 +14,24 @@ export default function CheckoutPage() {
   const [buyer, setBuyer] = useState<BuyerInfo>({ name: "", email: "", cpf: "" });
 
   const [cep, setCep] = useState("");
-  const [addressInfo, setAddressInfo] = useState<AddressInfo | null>(null);
   const [number, setNumber] = useState("");
+  const numberInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [cepLoading, setCepLoading] = useState(false);
-  const [cepError, setCepError] = useState<string | null>(null);
+  const { address: addressInfo, loading: cepLoading, error: cepError, fetchAddress } = useCep();
 
   const [rate, setRate] = useState<number | null>(null);
 
   useEffect(() => {
     let mounted = true;
 
-    fetchBRLConversionRate().then((r) => {
-      if (mounted) setRate(r);
-    });
+    fetchBRLConversionRate()
+      .then((r) => {
+        if (mounted) setRate(r);
+      })
+      .catch((err: unknown) => {
+        console.error("Erro ao buscar taxa de câmbio:", err);
+        if (mounted) setRate(null);
+      });
 
     return () => {
       mounted = false;
@@ -36,23 +40,25 @@ export default function CheckoutPage() {
 
   async function handleCepComplete(foundCep: string) {
     setCep(foundCep);
-    setCepLoading(true);
-    setCepError(null);
-    try {
-      const address = await fetchAddressByCep(foundCep);
-      setAddressInfo(address);
-    } catch (err: unknown) {
-      setAddressInfo(null);
-      const message = err instanceof Error ? err.message : "Erro ao buscar CEP";
-      setCepError(message);
-    } finally {
-      setCepLoading(false);
+    await fetchAddress(foundCep);
+
+    if (numberInputRef.current) {
+      numberInputRef.current.focus();
     }
   }
 
   function handleBuyerChange(field: keyof BuyerInfo, value: string) {
     setBuyer((s) => ({ ...s, [field]: value }));
   }
+
+  const isFormValid =
+    buyer.name.trim().length > 0 &&
+    buyer.email.trim().length > 0 &&
+    buyer.email.includes("@") &&
+    buyer.cpf.replace(/\D/g, "").length >= 11 &&
+    cep.replace(/\D/g, "").length === 8 &&
+    number.trim().length > 0 &&
+    state.items.length > 0;
 
   const subtotalUSD = state.items.reduce((s, item) => s + item.product.price * item.quantity, 0);
   const totalBRL = rate ? formatBRL(subtotalUSD, rate) : null;
@@ -92,7 +98,12 @@ export default function CheckoutPage() {
             {cepError && <span className="error">{cepError}</span>}
           </div>
 
-          <AddressFields addressInfo={addressInfo} number={number} onNumberChange={setNumber} />
+          <AddressFields
+            addressInfo={addressInfo}
+            number={number}
+            onNumberChange={setNumber}
+            numberInputRef={numberInputRef}
+          />
         </div>
 
         <div>
@@ -116,7 +127,7 @@ export default function CheckoutPage() {
         </div>
 
         <div>
-          <button disabled={state.items.length === 0}>Confirmar pedido</button>
+          {/* <button disabled={!isFormValid}>Confirmar pedido</button> */}
         </div>
       </section>
     </main>

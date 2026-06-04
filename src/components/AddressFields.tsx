@@ -1,13 +1,15 @@
-import type { AddressInfo } from "../types/checkout.types"
+import type { AddressInfo } from "../types/checkout.types";
+import type { RefObject } from "react";
 import './styles/AddressFields.css';
 
 type Props = {
     addressInfo: AddressInfo | null
     number: string
     onNumberChange: (value: string) => void
+    numberInputRef?: RefObject<HTMLInputElement | null>
 }
 
-export default function AddressFields({ addressInfo, number, onNumberChange}: Props) {
+export default function AddressFields({ addressInfo, number, onNumberChange, numberInputRef }: Props) {
   return (
     <div className="container">
       <div>
@@ -61,6 +63,7 @@ export default function AddressFields({ addressInfo, number, onNumberChange}: Pr
       <div>
         <label htmlFor="number">Número</label>
         <input
+          ref={numberInputRef}
           type="text"
           id="number"
           value={number}
