@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { fetchProductById } from '../services/productService';
 import type { Product } from '../types/product.types.ts';
 import './styles/HomePage.css';
+import { useCart } from "../hooks/useCart";
 
 const HomePage = () => {
   const [product, setProduct] = useState<Product | null>(null);
@@ -17,8 +18,19 @@ const HomePage = () => {
   if (error) return <div>{error}</div>;
   if (!product) return <div>Carregando prova de conceito...</div>;
 
+  const { items } = useCart();
+
   return (
     <main>
+
+      <ul>
+        {items.map(item => (
+          <li key={item.product.id}>
+            {item.product.title} - qtd: {item.quantity}
+          </li>
+        ))}
+      </ul>
+      
       <h1>PoC: Conexão com API</h1>
       <Link to={`/produto/${product.id}`} className="product-card">
         <h2>{product.title}</h2>
