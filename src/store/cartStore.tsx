@@ -115,19 +115,6 @@ function cartReducer(
       };
       break;
 
-    case "UPDATE_QUANTITY":
-      newState = {
-        items: state.items.map(item =>
-          item.product.id === action.payload.id
-            ? {
-                ...item,
-                quantity: action.payload.quantity,
-              }
-            : item
-        ),
-      };
-      break;
-
     case "CLEAR_CART":
       newState = initialState;
       break;
@@ -182,10 +169,6 @@ export function CartProvider({
     },
     []
   );
-
-  const updateQuantity = useCallback((productId: number, quantity: number) => {
-    dispatch({ type: "UPDATE_QUANTITY", payload: { id: productId, quantity } });
-  }, []);
 
   return (
     <CartContext.Provider
