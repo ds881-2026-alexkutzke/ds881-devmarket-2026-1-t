@@ -13,10 +13,23 @@ import StockBadge from "../components/StockBadge";
 
 import "./styles/ProductPage.css";
 
+interface Review {
+  reviewerName: string;
+  date: string;
+  rating: number;
+  comment: string;
+}
+
+interface Dimensions {
+  height: string | number;
+  width: string | number;
+  depth: string | number;
+}
+
 export default function ProductPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { product, loading, error } = useProduct(Number(id));
+  const { product, loading, error } = useProduct(Number(id || 0));
   const { addToCart } = useCart();
 
   const [exchangeRate, setExchangeRate] = useState<number | null>(null);
@@ -65,11 +78,13 @@ export default function ProductPage() {
 
   const handleBuyNow = () => {
     if (isOutOfStock) return;
-    addToCart(product, selectedQuantity); 
+    addToCart(product, selectedQuantity);
     navigate("/carrinho");
   };
 
-  const productDimensions = (product as any).dimensions;
+  const productDimensions = (product as unknown as { dimensions?: Dimensions }).dimensions;
+  const productReviews = (product as unknown as { reviews?: Review[] }).reviews;
+
   const discount = product.discountPercentage || 0;
   const hasDiscount = discount > 0;
   const basePrice = product.price || 0;
@@ -180,9 +195,9 @@ export default function ProductPage() {
         </div>
 
         <div className="product-page__reviews-list">
-          {(product as any).reviews && (product as any).reviews.length > 0 ? (
-            (product as any).reviews.map((review: any, index: number) => (
-              <div key={index} className="product-page__review-card">
+          {productReviews && productReviews.length > 0 ? (
+            productReviews.map((review, index) => (
+              <div key={`${review.reviewerName}-${review.date}-${index}`} className="product-page__review-card">
                 <div className="product-page__review-header">
                   <div className="product-page__review-user-info">
                     <h4 className="product-page__review-author">{review.reviewerName}</h4>
