@@ -1,5 +1,5 @@
 import './styles/HomePage.css';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import SearchBar from '../components/SearchBar';
 import { useProducts } from '../hooks/useProducts';
 import ProductGrid from '../components/ProductGrid';
@@ -8,6 +8,8 @@ import { useExchangeRate } from '../hooks/useExchangeRate';
 import CategoryFilter from '../components/CategoryFilter';
 import ErrorMessage from '../components/ErrorMessage';
 import LoadingSpinner from '../components/LoadingSpinner';
+
+const PRODUCTS_PER_PAGE = 16;
 
 export default function HomePage() {
   const { products, loading: productsLoading, hasFetchFailed } = useProducts();
@@ -18,6 +20,7 @@ export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>('Todos');
   const [sortBy, setSortBy] = useState<string>('relevance');
   const [isSortOpen, setIsSortOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const filteredProducts = useMemo(() => {
     if (!products) return [];
@@ -42,6 +45,26 @@ export default function HomePage() {
 
   const isLoading = productsLoading || categoriesLoading || rateLoading;
   const hasError = hasFetchFailed || !!rateError;
+  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE));
+
+  const paginatedProducts = useMemo(() => {
+    const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
+    return filteredProducts.slice(startIndex, startIndex + PRODUCTS_PER_PAGE);
+  }, [filteredProducts, currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedCategory, sortBy]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
+  const pageNumbers = useMemo(() => {
+    return Array.from({ length: totalPages }, (_, index) => index + 1);
+  }, [totalPages]);
 
   return (
     <main className="home-container">
@@ -115,7 +138,44 @@ export default function HomePage() {
                 )}
               </div>
             </div>
-            <ProductGrid products={filteredProducts} conversionRate={rate} />
+            <ProductGrid products={paginatedProducts} conversionRate={rate} />
+
+            {filteredProducts.length > 0 && (
+              <nav className="pagination" aria-label="Paginação de produtos">
+                <button
+                  type="button"
+                  className="pagination__button"
+                  onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                  disabled={currentPage === 1}
+                >
+                  Anterior
+                </button>
+
+                <div className="pagination__pages">
+                  {pageNumbers.map((pageNumber) => (
+                    <button
+                      key={pageNumber}
+                      type="button"
+                      className={`pagination__page ${
+                        currentPage === pageNumber ? 'pagination__page--active' : ''
+                      }`}
+                      onClick={() => setCurrentPage(pageNumber)}
+                    >
+                      {pageNumber}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  className="pagination__button"
+                  onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+                  disabled={currentPage === totalPages}
+                >
+                  Próxima
+                </button>
+              </nav>
+            )}
           </div>
         )}
       </section>
