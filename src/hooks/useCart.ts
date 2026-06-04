@@ -1,5 +1,14 @@
-import { useCartContext } from "../store/cartContext";
+import { useContext } from "react";
+import { CartContext } from "../store/cartStore";
 
 export function useCart() {
-  return useCartContext();
+  const context = useContext(CartContext);
+
+  if (!context) {
+    throw new Error(
+      "useCart deve ser usado dentro de um CartProvider"
+    );
+  }
+
+  return context;
 }
