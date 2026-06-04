@@ -15,6 +15,7 @@ type CartAction =
   | { type: "ADD_ITEM"; payload: { product: Product } }
   | { type: "DECREMENT_ITEM"; payload: { id: CartItem["product"]["id"] } }
   | { type: "REMOVE_ITEM"; payload: { id: CartItem["product"]["id"] } }
+  | { type: "UPDATE_QUANTITY"; payload: { id: CartItem["product"]["id"]; quantity: number } }
   | { type: "CLEAR_CART" };
 
 type CartContextValue = {
@@ -23,6 +24,7 @@ type CartContextValue = {
   addToCart: (product: Product) => void;
   decrementItem: (id: number) => void;
   removeFromCart: (productId: number) => void;
+  updateQuantity: (productId: number, quantity: number) => void;
 };
 
 type CartProviderProps = {
@@ -97,6 +99,24 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       break;
     }
 
+    case "UPDATE_QUANTITY": {
+      const { id, quantity } = action.payload;
+      if (quantity <= 0) {
+        newState = {
+          items: state.items.filter((item) => item.product.id !== id),
+        };
+      } else {
+        newState = {
+          items: state.items.map((item) =>
+            item.product.id === id
+              ? { ...item, quantity }
+              : item,
+          ),
+        };
+      }
+      break;
+    }
+
     case "REMOVE_ITEM":
       newState = {
         items: state.items.filter(
@@ -130,8 +150,12 @@ export function CartProvider({ children }: CartProviderProps) {
     dispatch({ type: "REMOVE_ITEM", payload: { id: productId } });
   }, []);
 
+  const updateQuantity = useCallback((productId: number, quantity: number) => {
+    dispatch({ type: "UPDATE_QUANTITY", payload: { id: productId, quantity } });
+  }, []);
+
   return (
-    <CartContext.Provider value={{ state, dispatch, addToCart, decrementItem, removeFromCart }}>
+    <CartContext.Provider value={{ state, dispatch, addToCart, decrementItem, removeFromCart, updateQuantity }}>
       {children}
     </CartContext.Provider>
   );
