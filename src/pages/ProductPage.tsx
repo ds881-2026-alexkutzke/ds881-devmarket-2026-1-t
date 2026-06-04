@@ -5,6 +5,8 @@ import { useCart } from "../hooks/useCart";
 import { fetchBRLConversionRate } from "../services/exchangeRateService";
 import { formatBRL } from "../utils/formatCurrency";
 import "./styles/ProductPage.css";
+import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorMessage from "../components/ErrorMessage";
 
 export default function ProductPage() {
   const { id } = useParams<{ id: string }>();
@@ -30,15 +32,11 @@ export default function ProductPage() {
   }, []);
 
   if (loading) {
-    return <div className="loading">Carregando produto...</div>;
+    return <LoadingSpinner />
   }
 
-  if (error) {
-    return <div className="error">Erro: {error}</div>;
-  }
-
-  if (!product) {
-    return <div className="not-found">Produto não encontrado.</div>;
+  if (error || !product) {
+    return <ErrorMessage message="Produto não encontrado."/>;
   }
 
   const totalInCart = items
