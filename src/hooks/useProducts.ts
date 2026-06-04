@@ -4,6 +4,7 @@ import { fetchProducts } from "../services/productService";
 
 export const useProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [hasFetchFailed, setHasFetchFailed] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -11,7 +12,9 @@ export const useProducts = () => {
       try {
         const data = await fetchProducts();
         setProducts(data);
-      } catch {
+      } catch (e) {
+        setProducts([]);
+        setHasFetchFailed(true);
         return;
       } finally {
         setLoading(false);
@@ -21,5 +24,5 @@ export const useProducts = () => {
     loadProducts();
   }, []);
 
-  return { products, loading };
+  return { products, loading, hasFetchFailed };
 };

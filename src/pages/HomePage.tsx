@@ -5,9 +5,10 @@ import { useProducts } from '../hooks/useProducts';
 import ProductGrid from '../components/ProductGrid';
 import { useCategories } from '../hooks/useCategories';
 import CategoryFilter from '../components/CategoryFilter';
+import ErrorMessage from '../components/ErrorMessage';
 
 export default function HomePage() {
-  const { products, loading: productsLoading } = useProducts();
+  const { products, loading: productsLoading, hasFetchFailed} = useProducts();
   const { categories, loading: categoriesLoading } = useCategories();
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -23,7 +24,6 @@ export default function HomePage() {
       return matchSearch && matchCategory;
     });
   }, [products, searchTerm, selectedCategory]);
-
 
   return (
     <main className="home-container">
@@ -49,11 +49,16 @@ export default function HomePage() {
       </header>
 
       <section className="home-content">
-        {productsLoading || categoriesLoading ? (
-          <div className="loading-state">Carregando o catálogo...</div>
-        ) : (
-          <ProductGrid products={filteredProducts} />
-        )}
+        {
+          !hasFetchFailed ?  
+        
+            productsLoading || categoriesLoading ? (
+              <div className="loading-state">Carregando o catálogo...</div>
+            ) : (
+              <ProductGrid products={filteredProducts} />
+            )
+          : <ErrorMessage message='Erro ao carregar produtos. Recarregue a página e tente novamente'></ErrorMessage>
+      }
       </section>
     </main>
   );
