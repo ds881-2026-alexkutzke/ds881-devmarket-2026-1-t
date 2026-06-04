@@ -14,6 +14,7 @@ export default function AddressFields({ addressInfo, number, onNumberChange, num
     <div className="container">
       <div>
         <label htmlFor="logradouro">Logradouro</label>
+        <label htmlFor="logradouro">Logradouro</label>
         <input
           type="text"
           id="logradouro"
@@ -63,14 +64,14 @@ export default function AddressFields({ addressInfo, number, onNumberChange, num
       <div>
         <label htmlFor="number">Número</label>
         <input
+          ref={numberRef}
           type="text"
           id="number"
           value={number}
           onChange={(e) => onNumberChange(e.target.value)}
           placeholder="Digite o número"
-          ref={numberRef} // <-- Ref conectada ao input
         />
       </div>
     </div>
-  )
+  );
 }

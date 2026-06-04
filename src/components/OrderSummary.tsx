@@ -1,4 +1,4 @@
-﻿import type { CartItem } from '../types/cart.types';
+import type { CartItem } from '../types/cart.types';
 import { formatBRL } from '../utils/formatCurrency';
 import './styles/OrderSummary.css';
 
