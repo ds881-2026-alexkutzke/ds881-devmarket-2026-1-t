@@ -7,7 +7,7 @@
 
 .search-bar__input {
   width: 100%;
-  max-width: 480px;
+  max-width: 100%;
   font-family: var(--sans);
   font-size: 14px;
   font-weight: 400;
