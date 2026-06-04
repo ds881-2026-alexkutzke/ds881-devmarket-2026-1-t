@@ -4,7 +4,6 @@ import CepInput from '../components/CepInput';
 import AddressFields from '../components/AddressFields';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
-import type { AddressInfo } from '../types/checkout.types';
 import CheckoutPaymentButton from '../components/CheckoutPaymentButton';
 import type { AddressInfo, BuyerInfo } from '../types/checkout.types';
 import { fetchAddressByCep } from '../services/cepService';
