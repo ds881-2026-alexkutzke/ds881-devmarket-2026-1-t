@@ -11,7 +11,10 @@ import ErrorMessage from "../components/ErrorMessage";
 export default function ProductPage() {
   const { id } = useParams<{ id: string }>();
   const { product, loading, error } = useProduct(Number(id));
-  const { items, addToCart } = useCart();
+  const {
+    state: { items },
+    addToCart,
+  } = useCart();
 
   const [exchangeRate, setExchangeRate] = useState<number | null>(null);
   const [isAddedFeedback, setIsAddedFeedback] = useState(false);
