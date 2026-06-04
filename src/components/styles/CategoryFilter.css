@@ -25,8 +25,9 @@
 }
 
 .category-filter__toggle:hover {
-  border-color: var(--accent-border);
-  color: var(--text-h);
+  border-color: #9ca3af;
+  color: #111827;
+  box-shadow: 0 0 0 2px rgba(170, 59, 255, 0.2);
 }
 
 .category-filter__toggle:focus-visible {
