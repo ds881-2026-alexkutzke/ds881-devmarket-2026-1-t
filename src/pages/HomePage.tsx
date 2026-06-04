@@ -22,7 +22,13 @@ export default function HomePage() {
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);      
+    window.navigation.navigate("#filters-bar");
+  };
+  
   const handleSearchChange = (value: string) => {
+    
     setSearchTerm(value);
     setCurrentPage(1);
   };
@@ -83,7 +89,7 @@ export default function HomePage() {
           Explore nossa coleção e encontre as melhores ferramentas para o seu próximo projeto.
         </p>
 
-        <div className="filters-bar">
+        <div className="filters-bar" id='filters-bar'>
           <SearchBar value={searchTerm} onChange={handleSearchChange} />
           <CategoryFilter
             categories={categories}
@@ -93,7 +99,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      <section className="home-content">
+      <section className="home-content" id='home-content'>
         {hasError ? (
           <ErrorMessage
             message={
@@ -152,7 +158,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   className="pagination__button"
-                  onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                  onClick={() => handlePageChange(currentPage - 1)}
                   disabled={safeCurrentPage === 1}
                 >
                   Anterior
@@ -166,8 +172,8 @@ export default function HomePage() {
                       className={`pagination__page ${
                         safeCurrentPage === pageNumber ? 'pagination__page--active' : ''
                       }`}
-                      onClick={() => setCurrentPage(pageNumber)}
-                    >
+                      onClick={() => handlePageChange(pageNumber)}
+                      >
                       {pageNumber}
                     </button>
                   ))}
@@ -176,7 +182,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   className="pagination__button"
-                  onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+                  onClick={() => handlePageChange(currentPage + 1)}
                   disabled={safeCurrentPage === totalPages}
                 >
                   Próxima
