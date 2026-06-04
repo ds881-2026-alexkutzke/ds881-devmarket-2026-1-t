@@ -1,10 +1,10 @@
 import { FiShoppingCart } from "react-icons/fi";
 import "./styles/Header.css";
-import { useCart } from "../store/cartStore";
+import { useCart } from "../hooks/useCart";
 
 export default function Header() {
-  const { state } = useCart();
-  const cartCount = state.items.reduce((acc, item) => acc + item.quantity, 0);
+  const { items } = useCart();
+  const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
     <header className="header">
