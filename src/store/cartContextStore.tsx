@@ -16,6 +16,7 @@ export type CartContextValue = {
   decrementItem: (id: number) => void;
   removeFromCart: (productId: number) => void;
   updateQuantity: (productId: number, quantity: number) => void;
+  clearCart: () => void;
 };
 
 export const CartContext = createContext<CartContextValue | undefined>(undefined);
