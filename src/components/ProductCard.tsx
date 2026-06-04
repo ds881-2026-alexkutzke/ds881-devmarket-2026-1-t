@@ -57,6 +57,7 @@ export default function ProductCard({ product, conversionRate }: ProductCardProp
           Adicionar ao carrinho
         </button>
       </div>
+      </Link>
     </article>
   );
 }
