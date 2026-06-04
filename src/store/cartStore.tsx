@@ -1,24 +1,9 @@
-import {createContext, useCallback, useContext, useReducer, type Dispatch, type ReactNode} from "react";
-import type { CartItem, CartState } from "../types/cart.types";
+import { useCallback, useReducer, type ReactNode } from "react";
+import { CartContext, type CartAction } from "./cartContextStore";
+import type { CartState } from "../types/cart.types";
 import type { Product } from "../types/product.types";
 
 const CART_STORAGE_KEY = "devmarket_cart";
-
-type CartAction =
-  | { type: "ADD_ITEM"; payload: { product: Product } }
-  | { type: "DECREMENT_ITEM"; payload: { id: CartItem["product"]["id"] } }
-  | { type: "REMOVE_ITEM"; payload: { id: CartItem["product"]["id"] } }
-  | { type: "UPDATE_QUANTITY"; payload: { id: CartItem["product"]["id"]; quantity: number } }
-  | { type: "CLEAR_CART" };
-
-type CartContextValue = {
-  state: CartState;
-  dispatch: Dispatch<CartAction>;
-  addToCart: (product: Product) => void;
-  decrementItem: (id: number) => void;
-  removeFromCart: (productId: number) => void;
-  updateQuantity: (productId: number, quantity: number) => void;
-};
 
 type CartProviderProps = {
   children: ReactNode;
@@ -30,13 +15,13 @@ const initialState: CartState = {
 
 function loadInitialState(): CartState {
   if (typeof localStorage === "undefined") {
-    return initialState; 
+    return initialState;
   }
 
   const savedCart = localStorage.getItem(CART_STORAGE_KEY);
 
   if (!savedCart) {
-    return initialState; 
+    return initialState;
   }
 
   try {
@@ -50,11 +35,8 @@ function persistState(state: CartState): void {
   if (typeof localStorage === "undefined") {
     return;
   }
-
   localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(state));
 }
-
-const CartContext = createContext<CartContextValue | undefined>(undefined);
 
 function cartReducer(state: CartState, action: CartAction): CartState {
   let newState: CartState;
@@ -69,10 +51,10 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       newState = {
         items: existingItem
           ? state.items.map((item) =>
-            item.product.id === product.id
-              ? { ...item, quantity: item.quantity + 1 }
-              : item,
-          )
+              item.product.id === product.id
+                ? { ...item, quantity: item.quantity + 1 }
+                : item,
+            )
           : [...state.items, { product, quantity: 1 }],
       };
       break;
@@ -82,13 +64,16 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       const item = state.items.find((i) => i.product.id === action.payload.id);
       if (!item) return state;
 
-      newState = item.quantity <= 1
-      ? { items: state.items.filter((i) => i.product.id !== action.payload.id) }
-      : { items: state.items.map((i) => i.product.id === action.payload.id
-          ? { ...i, quantity: i.quantity - 1 }
-          : i,
-        ),
-      };
+      newState =
+        item.quantity <= 1
+          ? { items: state.items.filter((i) => i.product.id !== action.payload.id) }
+          : {
+              items: state.items.map((i) =>
+                i.product.id === action.payload.id
+                  ? { ...i, quantity: i.quantity - 1 }
+                  : i,
+              ),
+            };
       break;
     }
 
@@ -101,9 +86,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       } else {
         newState = {
           items: state.items.map((item) =>
-            item.product.id === id
-              ? { ...item, quantity }
-              : item,
+            item.product.id === id ? { ...item, quantity } : item,
           ),
         };
       }
@@ -148,19 +131,17 @@ export function CartProvider({ children }: CartProviderProps) {
   }, []);
 
   return (
-    <CartContext.Provider value={{ state, dispatch, addToCart, decrementItem, removeFromCart, updateQuantity }}>
+    <CartContext.Provider
+      value={{
+        state,
+        dispatch,
+        addToCart,
+        decrementItem,
+        removeFromCart,
+        updateQuantity,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
-}
-
-
-export function useCart() {
-  const context = useContext(CartContext);
-
-  if (context === undefined) {
-    throw new Error("useCart deve ser usado dentro de um CartProvider");
-  }
-
-  return context;
 }
