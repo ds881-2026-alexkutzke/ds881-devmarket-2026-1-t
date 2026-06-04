@@ -21,6 +21,7 @@ type CartContextValue = {
   state: CartState;
   dispatch: Dispatch<CartAction>;
   addToCart: (product: Product) => void;
+  removeFromCart: (productId: number) => void;
 };
 
 type CartProviderProps = {
@@ -72,10 +73,10 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       newState = {
         items: existingItem
           ? state.items.map((item) =>
-              item.product.id === product.id
-                ? { ...item, quantity: item.quantity + 1 }
-                : item,
-            )
+            item.product.id === product.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item,
+          )
           : [...state.items, { product, quantity: 1 }],
       };
       break;
@@ -120,8 +121,12 @@ export function CartProvider({ children }: CartProviderProps) {
     dispatch({ type: "ADD_ITEM", payload: { product } });
   }, []);
 
+  const removeFromCart = useCallback((productId: number) => {
+    dispatch({ type: "REMOVE_ITEM", payload: { id: productId } });
+  }, []);
+
   return (
-    <CartContext.Provider value={{ state, dispatch, addToCart }}>
+    <CartContext.Provider value={{ state, dispatch, addToCart, removeFromCart }}>
       {children}
     </CartContext.Provider>
   );
