@@ -1,11 +1,6 @@
-import {
-  createContext,
-  useCallback,
-  useReducer,
-  type ReactNode,
-} from "react";
-
-import type { CartItem, CartState } from "../types/cart.types";
+import { useCallback, useReducer, type ReactNode,} from "react";
+import { CartContext } from "./cartContext";
+import type { CartState } from "../types/cart.types";
 import type { Product } from "../types/product.types";
 
 const CART_STORAGE_KEY = "@DevMarket:cart";
@@ -21,13 +16,6 @@ type CartAction =
       };
     }
   | { type: "CLEAR_CART" };
-
-type CartContextValue = {
-  items: CartItem[];
-  addToCart: (product: Product) => void;
-  removeFromCart: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
-};
 
 type CartProviderProps = {
   children: ReactNode;
@@ -65,10 +53,6 @@ function persistState(state: CartState): void {
     JSON.stringify(state)
   );
 }
-
-export const CartContext = createContext<CartContextValue | undefined>(
-  undefined
-);
 
 function cartReducer(
   state: CartState,
