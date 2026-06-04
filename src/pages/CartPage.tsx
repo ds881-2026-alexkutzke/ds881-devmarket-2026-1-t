@@ -2,7 +2,7 @@ import { useCart } from "../hooks/useCart";
 import CartItemRow from '../components/CartItemRow';
 
 export default function CartPage() {
-  const { items } = useCart();
+  const { state: { items }} = useCart();
   const rate = 5.7; // taxa fixa para testes
 
   return (
