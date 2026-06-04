@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { fetchAddressByCep } from "../services/cepService";
 import type { AddressInfo } from "../types/checkout.types";
 
-export const useCep = () => {
+export function useCep() {
   const [address, setAddress] = useState<AddressInfo | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,4 +39,4 @@ export const useCep = () => {
     error,
     fetchAddress,
   };
-};
+}

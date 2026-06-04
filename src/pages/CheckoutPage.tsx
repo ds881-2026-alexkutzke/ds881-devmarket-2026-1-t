@@ -1,19 +1,20 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { CartItem } from "../types/cart.types";
-import CepInput from "../components/CepInput";
+import type { BuyerInfo } from "../types/checkout.types";
 import AddressFields from "../components/AddressFields";
+import CepInput from "../components/CepInput";
 import { useCep } from "../hooks/useCep";
+import { useCart } from "../store/cartStore";
 import { fetchBRLConversionRate } from "../services/exchangeRateService";
 import { formatBRL } from "../utils/formatCurrency";
-import type { BuyerInfo } from "../types/checkout.types";
-import { useCart } from "../store/cartStore";
 import './styles/CheckoutPage.css';
 
 export default function CheckoutPage() {
+  const navigate = useNavigate();
   const { state } = useCart();
 
   const [buyer, setBuyer] = useState<BuyerInfo>({ name: "", email: "", cpf: "" });
-
   const [cep, setCep] = useState("");
   const [number, setNumber] = useState("");
   const numberRef = useRef<HTMLInputElement | null>(null);
@@ -66,11 +67,20 @@ export default function CheckoutPage() {
 
   return (
     <main className="checkout-page">
-      <h1>Checkout</h1>
+      <div className="checkout-page__hero">
+        <h1>Checkout</h1>
+        <p className="checkout-page__subtitle">
+          Preencha os dados do comprador e confirme o endereço para seguir para o pagamento.
+        </p>
+      </div>
 
-      <section className="checkout-page__section">
-        <div className="checkout-page__card">
-          <h2>Dados do comprador</h2>
+      <div className="checkout-page__content">
+        <section className="checkout-page__card" aria-labelledby="buyer-section-title">
+          <div className="checkout-page__section-header">
+            <h2 id="buyer-section-title">Dados do comprador</h2>
+            <p>Essas informações serão usadas para identificar a compra.</p>
+          </div>
+
           <div className="checkout-page__buyer-form">
             <input
               placeholder="Nome"
@@ -89,48 +99,69 @@ export default function CheckoutPage() {
               onChange={(e) => handleBuyerChange("cpf", e.target.value.replace(/\D/g, ""))}
             />
           </div>
-        </div>
+        </section>
 
-        <div className="checkout-page__card">
-          <h2>Endereço</h2>
-          <div className="checkout-page__cep-row">
+        <section className="checkout-page__card" aria-labelledby="address-section-title">
+          <div className="checkout-page__section-header">
+            <h2 id="address-section-title">Endereço de entrega</h2>
+            <p>Informe o CEP para preencher o endereço automaticamente.</p>
+          </div>
+
+          <div className="checkout-page__cep-block">
+            <span className="checkout-page__field-label">CEP</span>
             <CepInput value={cep} onChange={setCep} onCepComplete={handleCepComplete} />
-            {cepLoading && <span>Buscando CEP...</span>}
-            {cepError && <span className="error">{cepError}</span>}
           </div>
 
-          <AddressFields
-            addressInfo={addressInfo}
-            number={number}
-            onNumberChange={setNumber}
-            numberRef={numberRef}
-          />
-        </div>
+          {cepLoading && <span>Buscando CEP...</span>}
+          {cepError && <span className="error">{cepError}</span>}
 
-        <div className="checkout-page__card">
-          <h2>Resumo do pedido</h2>
-          <div>
-            {state.items.length === 0 && <p>Seu carrinho está vazio</p>}
-            {state.items.map((item: CartItem) => (
-              <div key={item.product.id} className="checkout-page__cart-item">
-                <div>
-                  <strong>{item.product.title}</strong>
-                  <div>Quantidade: {item.quantity}</div>
+          <div className="checkout-page__address">
+            <AddressFields
+              addressInfo={addressInfo}
+              number={number}
+              onNumberChange={setNumber}
+              numberRef={numberRef}
+            />
+          </div>
+        </section>
+
+        <section className="checkout-page__card" aria-labelledby="summary-section-title">
+          <div className="checkout-page__section-header">
+            <h2 id="summary-section-title">Resumo do pedido</h2>
+          </div>
+
+          {state.items.length === 0 ? (
+            <p>Seu carrinho está vazio</p>
+          ) : (
+            <div>
+              {state.items.map((item: CartItem) => (
+                <div key={item.product.id} className="checkout-page__cart-item">
+                  <div>
+                    <strong>{item.product.title}</strong>
+                    <div>Quantidade: {item.quantity}</div>
+                  </div>
+                  <div>{item.product.price.toFixed(2)} USD</div>
                 </div>
-                <div>{item.product.price.toFixed(2)} USD</div>
+              ))}
+
+              <div className="checkout-page__subtotal">
+                <strong>Subtotal:</strong> {subtotalUSD.toFixed(2)} USD {rate ? `· ${totalBRL}` : ""}
               </div>
-            ))}
-
-            <div className="checkout-page__subtotal">
-              <strong>Subtotal:</strong> {subtotalUSD.toFixed(2)} USD {rate ? `· ${totalBRL}` : ""}
             </div>
-          </div>
-        </div>
+          )}
+        </section>
 
-        <div>
-          <button disabled={!isFormValid}>Confirmar pedido</button>
+        <div className="checkout-page__actions">
+          <button
+            className="checkout-page__button"
+            type="button"
+            disabled={!isFormValid}
+            onClick={() => navigate('/pagamento')}
+          >
+            Ir para pagamento
+          </button>
         </div>
-      </section>
+      </div>
     </main>
   );
 }
