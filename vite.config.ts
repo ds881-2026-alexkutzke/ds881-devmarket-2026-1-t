@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/ds881-devmarket-2026-1-t/',
   plugins: [react()],
   test: {
     globals: true,
