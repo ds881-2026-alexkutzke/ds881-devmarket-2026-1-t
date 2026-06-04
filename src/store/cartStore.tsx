@@ -130,6 +130,10 @@ export function CartProvider({ children }: CartProviderProps) {
     dispatch({ type: "UPDATE_QUANTITY", payload: { id: productId, quantity } });
   }, []);
 
+  const clearCart = useCallback(() => {
+    dispatch({ type: "CLEAR_CART" });
+  }, []);
+
   return (
     <CartContext.Provider
       value={{
@@ -139,6 +143,7 @@ export function CartProvider({ children }: CartProviderProps) {
         decrementItem,
         removeFromCart,
         updateQuantity,
+        clearCart,
       }}
     >
       {children}
