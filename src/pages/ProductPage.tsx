@@ -107,7 +107,7 @@ export default function ProductPage() {
         <div className="product-page__info-section">
           <h1 className="product-page__title">{product.title}</h1>
           
-          <div style={{ marginTop: "-4px", marginBottom: "4px" }}>
+          <div className="product-page__rating-wrapper">
             <ProductRating rating={product.rating || 0} />
           </div>
           
@@ -118,7 +118,7 @@ export default function ProductPage() {
           
           <p className="product-page__description">{product.description}</p>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "16px", margin: "8px 0" }}>
+          <div className="product-page__price-stock-row">
             <div className="product-page__price-container">
               {hasDiscount && (
                 <div className="product-page__price-original-wrapper">
