@@ -13,13 +13,18 @@ const CART_STORAGE_KEY = "@DevMarket:cart";
 
 type CartAction =
   | { type: "ADD_ITEM"; payload: { product: Product } }
+  | { type: "DECREMENT_ITEM"; payload: { id: CartItem["product"]["id"] } }
   | { type: "REMOVE_ITEM"; payload: { id: CartItem["product"]["id"] } }
+  | { type: "UPDATE_QUANTITY"; payload: { id: CartItem["product"]["id"]; quantity: number } }
   | { type: "CLEAR_CART" };
 
 type CartContextValue = {
   state: CartState;
   dispatch: Dispatch<CartAction>;
   addToCart: (product: Product) => void;
+  decrementItem: (id: number) => void;
+  removeFromCart: (productId: number) => void;
+  updateQuantity: (productId: number, quantity: number) => void;
 };
 
 type CartProviderProps = {
@@ -71,14 +76,47 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       newState = {
         items: existingItem
           ? state.items.map((item) =>
-              item.product.id === product.id
-                ? { ...item, quantity: item.quantity + 1 }
-                : item,
-            )
+            item.product.id === product.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item,
+          )
           : [...state.items, { product, quantity: 1 }],
       };
       break;
     }
+
+    case "DECREMENT_ITEM": {
+      const item = state.items.find((i) => i.product.id === action.payload.id);
+      if (!item) return state;
+
+      newState = item.quantity <= 1
+      ? { items: state.items.filter((i) => i.product.id !== action.payload.id) }
+      : { items: state.items.map((i) => i.product.id === action.payload.id
+          ? { ...i, quantity: i.quantity - 1 }
+          : i,
+        ),
+      };
+      break;
+    }
+
+    case "UPDATE_QUANTITY": {
+      const { id, quantity } = action.payload;
+      if (quantity <= 0) {
+        newState = {
+          items: state.items.filter((item) => item.product.id !== id),
+        };
+      } else {
+        newState = {
+          items: state.items.map((item) =>
+            item.product.id === id
+              ? { ...item, quantity }
+              : item,
+          ),
+        };
+      }
+      break;
+    }
+
     case "REMOVE_ITEM":
       newState = {
         items: state.items.filter(
@@ -104,8 +142,20 @@ export function CartProvider({ children }: CartProviderProps) {
     dispatch({ type: "ADD_ITEM", payload: { product } });
   }, []);
 
+  const decrementItem = useCallback((id: number) => {
+    dispatch({ type: "DECREMENT_ITEM", payload: { id } });
+  }, []);
+
+  const removeFromCart = useCallback((productId: number) => {
+    dispatch({ type: "REMOVE_ITEM", payload: { id: productId } });
+  }, []);
+
+  const updateQuantity = useCallback((productId: number, quantity: number) => {
+    dispatch({ type: "UPDATE_QUANTITY", payload: { id: productId, quantity } });
+  }, []);
+
   return (
-    <CartContext.Provider value={{ state, dispatch, addToCart }}>
+    <CartContext.Provider value={{ state, dispatch, addToCart, decrementItem, removeFromCart, updateQuantity }}>
       {children}
     </CartContext.Provider>
   );
