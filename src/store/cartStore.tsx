@@ -1,29 +1,9 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useReducer,
-  type Dispatch,
-  type ReactNode,
-} from "react";
-import type { CartItem, CartState } from "../types/cart.types";
+import { useCallback, useReducer, type ReactNode } from "react";
+import { CartContext, type CartAction } from "./cartContextStore";
+import type { CartState } from "../types/cart.types";
 import type { Product } from "../types/product.types";
 
-const CART_STORAGE_KEY = "@DevMarket:cart";
-
-type CartAction =
-  | { type: "ADD_ITEM"; payload: { product: Product } }
-  | { type: "DECREMENT_ITEM"; payload: { id: CartItem["product"]["id"] } }
-  | { type: "REMOVE_ITEM"; payload: { id: CartItem["product"]["id"] } }
-  | { type: "CLEAR_CART" };
-
-type CartContextValue = {
-  state: CartState;
-  dispatch: Dispatch<CartAction>;
-  addToCart: (product: Product) => void;
-  decrementItem: (id: number) => void;
-  removeFromCart: (productId: number) => void;
-};
+const CART_STORAGE_KEY = "devmarket_cart";
 
 type CartProviderProps = {
   children: ReactNode;
@@ -55,11 +35,8 @@ function persistState(state: CartState): void {
   if (typeof localStorage === "undefined") {
     return;
   }
-
   localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(state));
 }
-
-const CartContext = createContext<CartContextValue | undefined>(undefined);
 
 function cartReducer(state: CartState, action: CartAction): CartState {
   let newState: CartState;
@@ -74,10 +51,10 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       newState = {
         items: existingItem
           ? state.items.map((item) =>
-            item.product.id === product.id
-              ? { ...item, quantity: item.quantity + 1 }
-              : item,
-          )
+              item.product.id === product.id
+                ? { ...item, quantity: item.quantity + 1 }
+                : item,
+            )
           : [...state.items, { product, quantity: 1 }],
       };
       break;
@@ -87,13 +64,32 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       const item = state.items.find((i) => i.product.id === action.payload.id);
       if (!item) return state;
 
-      newState = item.quantity <= 1
-      ? { items: state.items.filter((i) => i.product.id !== action.payload.id) }
-      : { items: state.items.map((i) => i.product.id === action.payload.id
-          ? { ...i, quantity: i.quantity - 1 }
-          : i,
-        ),
-      };
+      newState =
+        item.quantity <= 1
+          ? { items: state.items.filter((i) => i.product.id !== action.payload.id) }
+          : {
+              items: state.items.map((i) =>
+                i.product.id === action.payload.id
+                  ? { ...i, quantity: i.quantity - 1 }
+                  : i,
+              ),
+            };
+      break;
+    }
+
+    case "UPDATE_QUANTITY": {
+      const { id, quantity } = action.payload;
+      if (quantity <= 0) {
+        newState = {
+          items: state.items.filter((item) => item.product.id !== id),
+        };
+      } else {
+        newState = {
+          items: state.items.map((item) =>
+            item.product.id === id ? { ...item, quantity } : item,
+          ),
+        };
+      }
       break;
     }
 
@@ -130,20 +126,22 @@ export function CartProvider({ children }: CartProviderProps) {
     dispatch({ type: "REMOVE_ITEM", payload: { id: productId } });
   }, []);
 
+  const updateQuantity = useCallback((productId: number, quantity: number) => {
+    dispatch({ type: "UPDATE_QUANTITY", payload: { id: productId, quantity } });
+  }, []);
+
   return (
-    <CartContext.Provider value={{ state, dispatch, addToCart, decrementItem, removeFromCart }}>
+    <CartContext.Provider
+      value={{
+        state,
+        dispatch,
+        addToCart,
+        decrementItem,
+        removeFromCart,
+        updateQuantity,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
-}
-
-// eslint-disable-next-line react-refresh/only-export-components
-export function useCart() {
-  const context = useContext(CartContext);
-
-  if (context === undefined) {
-    throw new Error("useCart deve ser usado dentro de um CartProvider");
-  }
-
-  return context;
 }

@@ -1,14 +1,11 @@
 import { FiShoppingCart } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import "./styles/Header.css";
-import { useCart } from "../store/cartStore";
+import { useCart } from "../hooks/useCart";
 
 export default function Header() {
-  const { state } = useCart();
-  const cartCount = state.items.reduce(
-    (acc, item) => acc + item.quantity,
-    0,
-  );
+  const { state: { items } } = useCart();
+  const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
     <header className="header">
