@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useProduct } from "../hooks/useProduct";
-import { useCart } from "../store/cartStore";
+import { useCart } from "../hooks/useCart";
 import { fetchBRLConversionRate } from "../services/exchangeRateService";
 import { formatBRL } from "../utils/formatCurrency";
 import "./styles/ProductPage.css";
@@ -9,7 +9,7 @@ import "./styles/ProductPage.css";
 export default function ProductPage() {
   const { id } = useParams<{ id: string }>();
   const { product, loading, error } = useProduct(Number(id));
-  const { state, addToCart } = useCart();
+  const { items, addToCart } = useCart();
   
   const [exchangeRate, setExchangeRate] = useState<number | null>(null);
 
@@ -41,9 +41,9 @@ export default function ProductPage() {
     return <div className="not-found">Produto não encontrado.</div>;
   }
 
-  const totalInCart = state.items
-    .filter((item) => item.product.id === product.id)
-    .reduce((sum, item) => sum + item.quantity, 0);
+  const totalInCart = items
+  .filter((item) => item.product.id === product.id)
+  .reduce((sum, item) => sum + item.quantity, 0);
 
   const isOutOfStock = product.stock === 0 || totalInCart >= product.stock;
 
