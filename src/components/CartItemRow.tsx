@@ -10,23 +10,20 @@ type CartItemRowProps = {
 };
 
 export default function CartItemRow({ item, rate }: CartItemRowProps) {
-  const { dispatch } = useCart();
+  const { addToCart, decrementItem, removeFromCart } = useCart();
 
   const { product, quantity } = item;
 
   function handleIncrease() {
-    dispatch({
-        type: 'ADD_ITEM',
-        payload: { product },
-    });
+    addToCart(product);
   }
 
   function handleDecrease() {
-    dispatch({ type: 'DECREMENT_ITEM', payload: { id: product.id } });
+    decrementItem(product.id);
   }
 
   function handleRemove() {
-    dispatch({ type: 'REMOVE_ITEM', payload: { id: product.id } });
+    removeFromCart(product.id);
   }
 
   const unitPrice = formatBRL(product.price, rate);
@@ -69,8 +66,6 @@ export default function CartItemRow({ item, rate }: CartItemRowProps) {
           </button>
         </div>
       </div>
-
-
 
       <p className="cart-item-row__total-price">{totalPrice}</p>
 
