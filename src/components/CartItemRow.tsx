@@ -1,6 +1,6 @@
 import type { CartItem } from '../types/cart.types';
 import { formatBRL } from '../utils/formatCurrency';
-import { useCart } from '../store/cartStore';
+import { useCart } from "../hooks/useCart";
 import './styles/CartItemRow.css';
 import { Link } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ type CartItemRowProps = {
 };
 
 export default function CartItemRow({ item, rate }: CartItemRowProps) {
-  const { addToCart, decrementItem, removeFromCart } = useCart();
+  const { addToCart, updateQuantity, removeFromCart } = useCart();
 
   const { product, quantity } = item;
 
@@ -19,7 +19,11 @@ export default function CartItemRow({ item, rate }: CartItemRowProps) {
   }
 
   function handleDecrease() {
-    decrementItem(product.id);
+    if (item.quantity === 1) {
+      removeFromCart(item.product.id);
+    } else {
+      updateQuantity(item.product.id, item.quantity - 1);
+    }
   }
 
   function handleRemove() {
