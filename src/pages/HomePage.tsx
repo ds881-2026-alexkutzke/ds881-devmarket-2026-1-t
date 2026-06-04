@@ -9,6 +9,8 @@ import CategoryFilter from '../components/CategoryFilter';
 import ErrorMessage from '../components/ErrorMessage';
 import LoadingSpinner from '../components/LoadingSpinner';
 
+const PRODUCTS_PER_PAGE = 16;
+
 export default function HomePage() {
   const { products, loading: productsLoading, hasFetchFailed } = useProducts();
   const { categories, loading: categoriesLoading } = useCategories();
@@ -18,6 +20,29 @@ export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>('Todos');
   const [sortBy, setSortBy] = useState<string>('relevance');
   const [isSortOpen, setIsSortOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);      
+    window.navigation.navigate("#filters-bar");
+  };
+  
+  const handleSearchChange = (value: string) => {
+    
+    setSearchTerm(value);
+    setCurrentPage(1);
+  };
+
+  const handleCategoryChange = (category: string | null) => {
+    setSelectedCategory(category);
+    setCurrentPage(1);
+  };
+
+  const handleSortChange = (newSortBy: string) => {
+    setSortBy(newSortBy);
+    setIsSortOpen(false);
+    setCurrentPage(1);
+  };
 
   const filteredProducts = useMemo(() => {
     if (!products) return [];
@@ -42,6 +67,17 @@ export default function HomePage() {
 
   const isLoading = productsLoading || categoriesLoading || rateLoading;
   const hasError = hasFetchFailed || !!rateError;
+  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+
+  const paginatedProducts = useMemo(() => {
+    const startIndex = (safeCurrentPage - 1) * PRODUCTS_PER_PAGE;
+    return filteredProducts.slice(startIndex, startIndex + PRODUCTS_PER_PAGE);
+  }, [filteredProducts, safeCurrentPage]);
+
+  const pageNumbers = useMemo(() => {
+    return Array.from({ length: totalPages }, (_, index) => index + 1);
+  }, [totalPages]);
 
   return (
     <main className="home-container">
@@ -53,17 +89,17 @@ export default function HomePage() {
           Explore nossa coleção e encontre as melhores ferramentas para o seu próximo projeto.
         </p>
 
-        <div className="filters-bar">
-          <SearchBar value={searchTerm} onChange={setSearchTerm} />
+        <div className="filters-bar" id='filters-bar'>
+          <SearchBar value={searchTerm} onChange={handleSearchChange} />
           <CategoryFilter
             categories={categories}
             selected={selectedCategory}
-            onSelect={setSelectedCategory}
+            onSelect={handleCategoryChange}
           />
         </div>
       </header>
 
-      <section className="home-content">
+      <section className="home-content" id='home-content'>
         {hasError ? (
           <ErrorMessage
             message={
@@ -93,21 +129,21 @@ export default function HomePage() {
                     <li>
                       <button type="button"
                       className={`sort-filter__option ${sortBy === 'relevance' ? 'sort-filter__option--active' : ''}`}
-                      onClick={() => { setSortBy('relevance'); setIsSortOpen(false); }}>
+                      onClick={() => handleSortChange('relevance')}>
                         Relevância
                       </button>
                     </li>
                     <li>
                       <button type="button"
                       className={`sort-filter__option ${sortBy === 'price-low' ? 'sort-filter__option--active' : ''}`}
-                      onClick={() => { setSortBy('price-low'); setIsSortOpen(false); }}>
+                      onClick={() => handleSortChange('price-low')}>
                         Menor preço
                       </button>
                     </li>
                     <li>
                       <button type="button"
                       className={`sort-filter__option ${sortBy === 'price-high' ? 'sort-filter__option--active' : ''}`}
-                      onClick={() => { setSortBy('price-high'); setIsSortOpen(false); }}>
+                      onClick={() => handleSortChange('price-high')}>
                         Maior preço
                       </button>
                     </li>
@@ -115,7 +151,44 @@ export default function HomePage() {
                 )}
               </div>
             </div>
-            <ProductGrid products={filteredProducts} conversionRate={rate} />
+            <ProductGrid products={paginatedProducts} conversionRate={rate} />
+
+            {filteredProducts.length > 0 && (
+              <nav className="pagination" aria-label="Paginação de produtos">
+                <button
+                  type="button"
+                  className="pagination__button"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={safeCurrentPage === 1}
+                >
+                  Anterior
+                </button>
+
+                <div className="pagination__pages">
+                  {pageNumbers.map((pageNumber) => (
+                    <button
+                      key={pageNumber}
+                      type="button"
+                      className={`pagination__page ${
+                        safeCurrentPage === pageNumber ? 'pagination__page--active' : ''
+                      }`}
+                      onClick={() => handlePageChange(pageNumber)}
+                      >
+                      {pageNumber}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  className="pagination__button"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={safeCurrentPage === totalPages}
+                >
+                  Próxima
+                </button>
+              </nav>
+            )}
           </div>
         )}
       </section>
