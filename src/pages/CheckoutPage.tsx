@@ -45,6 +45,7 @@ export default function CheckoutPage() {
     buyerInfo.name.trim() === '' ||
     buyerInfo.email.trim() === '' ||
     cep.trim() === '' ||
+    addressInfo === null ||
     cpfDigits.length !== 11;
 
   return (
