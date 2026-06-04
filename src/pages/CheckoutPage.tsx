@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import AddressFields from '../components/AddressFields';
 import BuyerForm from '../components/BuyerForm';
 import CepInput from '../components/CepInput';
+import LoadingSpinner from '../components/LoadingSpinner';
+import ErrorMessage from '../components/ErrorMessage';
 import { fetchAddressByCep } from '../services/cepService';
 import type { AddressInfo, BuyerInfo } from '../types/checkout.types';
 import './styles/CheckoutPage.css';
@@ -17,6 +19,10 @@ export default function CheckoutPage() {
     email: '',
     cpf: '',
   });
+  const [cepLoading, setCepLoading] = useState(false);
+  const [cepError, setCepError] = useState<string | null>(null);
+
+  // 1. Cria a referência usando useRef
   const numberInputRef = useRef<HTMLInputElement>(null);
 
   const handleBuyerChange = (field: keyof BuyerInfo, value: string) => {
@@ -27,16 +33,26 @@ export default function CheckoutPage() {
   };
 
   const handleCepComplete = async (completedCep: string) => {
+    setCepLoading(true);
+    setCepError(null);
+
     try {
+      // Chama o serviço. Se o CEP for inválido, o serviço lançará um erro.
       const data = await fetchAddressByCep(completedCep);
 
       setAddressInfo(data);
 
+      // 2. Foco ocorre apenas em caso de sucesso (se chegou aqui, não deu erro)
       if (numberInputRef.current) {
         numberInputRef.current.focus();
       }
     } catch {
+      // 3. Foco NÃO ocorre em caso de erro na consulta
+      // Limpamos os dados e garantimos silêncio (sem console.log)
       setAddressInfo(null);
+      setCepError('CEP inválido ou não encontrado');
+    } finally {
+      setCepLoading(false);
     }
   };
 
@@ -85,6 +101,9 @@ export default function CheckoutPage() {
               onCepComplete={handleCepComplete}
             />
           </div>
+
+          {cepLoading && <LoadingSpinner />}
+          {!cepLoading && cepError !== null && <ErrorMessage message={cepError} />}
 
           <div className="checkout-page__address">
             <AddressFields
