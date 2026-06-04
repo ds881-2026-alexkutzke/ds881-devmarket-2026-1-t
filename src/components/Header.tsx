@@ -13,15 +13,14 @@ export default function Header() {
 
       <div className="header__right">
         <nav className="header__nav">
-          {/* Adicione aqui a rota da pagina Home - por enquanto nao vai pra lugar nenhum */}
-          <a href="/" className="header__link">
+          <Link to="/" className="header__link">
             Home
-          </a>
+          </Link>
 
           {/* Adicione aqui a rota da pagina Sobre */}
-          <a href="/sobre" className="header__link">
+          <Link to="/sobre" className="header__link">
             Sobre
-          </a>
+          </Link>
         </nav>
 
         {/* Rota da página Carrinho */}
