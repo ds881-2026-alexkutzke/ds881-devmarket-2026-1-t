@@ -40,4 +40,3 @@ export default function OrderSummary({ items, rate }: OrderSummaryProps) {
     </section>
   );
 }
-

@@ -1,76 +1,75 @@
-import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import type { CartItem } from "../types/cart.types";
-import type { BuyerInfo } from "../types/checkout.types";
-import AddressFields from "../components/AddressFields";
-import CepInput from "../components/CepInput";
-import { useCep } from "../hooks/useCep";
-import { useCart } from "../store/cartStore";
-import { fetchBRLConversionRate } from "../services/exchangeRateService";
-import { formatBRL } from "../utils/formatCurrency";
+import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import AddressFields from '../components/AddressFields';
+import BuyerForm from '../components/BuyerForm';
+import CepInput from '../components/CepInput';
+import LoadingSpinner from '../components/LoadingSpinner';
+import ErrorMessage from '../components/ErrorMessage';
+import { fetchAddressByCep } from '../services/cepService';
+import type { AddressInfo, BuyerInfo } from '../types/checkout.types';
 import './styles/CheckoutPage.css';
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
-  const { state } = useCart();
+  const [cep, setCep] = useState('');
+  const [number, setNumber] = useState('');
+  const [addressInfo, setAddressInfo] = useState<AddressInfo | null>(null);
+  const [buyerInfo, setBuyerInfo] = useState<BuyerInfo>({
+    name: '',
+    email: '',
+    cpf: '',
+  });
+  const [cepLoading, setCepLoading] = useState(false);
+  const [cepError, setCepError] = useState<string | null>(null);
 
-  const [buyer, setBuyer] = useState<BuyerInfo>({ name: "", email: "", cpf: "" });
-  const [cep, setCep] = useState("");
-  const [number, setNumber] = useState("");
-  const numberRef = useRef<HTMLInputElement | null>(null);
+  // 1. Cria a referência usando useRef
+  const numberInputRef = useRef<HTMLInputElement>(null);
 
-  const { address: addressInfo, loading: cepLoading, error: cepError, fetchAddress } = useCep();
+  const handleBuyerChange = (field: keyof BuyerInfo, value: string) => {
+    setBuyerInfo((currentBuyerInfo) => ({
+      ...currentBuyerInfo,
+      [field]: value,
+    }));
+  };
 
-  const [rate, setRate] = useState<number | null>(null);
+  const handleCepComplete = async (completedCep: string) => {
+    setCepLoading(true);
+    setCepError(null);
 
-  useEffect(() => {
-    let mounted = true;
+    try {
+      // Chama o serviço. Se o CEP for inválido, o serviço lançará um erro.
+      const data = await fetchAddressByCep(completedCep);
 
-    fetchBRLConversionRate()
-      .then((r) => {
-        if (mounted) setRate(r);
-      })
-      .catch((err: unknown) => {
-        console.error("Erro ao buscar taxa de câmbio:", err);
-        if (mounted) setRate(null);
-      });
+      setAddressInfo(data);
 
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  async function handleCepComplete(foundCep: string) {
-    setCep(foundCep);
-    await fetchAddress(foundCep);
-
-    if (numberRef.current) {
-      numberRef.current.focus();
+      // 2. Foco ocorre apenas em caso de sucesso (se chegou aqui, não deu erro)
+      if (numberInputRef.current) {
+        numberInputRef.current.focus();
+      }
+    } catch {
+      // 3. Foco NÃO ocorre em caso de erro na consulta
+      // Limpamos os dados e garantimos silêncio (sem console.log)
+      setAddressInfo(null);
+      setCepError('CEP inválido ou não encontrado');
+    } finally {
+      setCepLoading(false);
     }
-  }
+  };
 
-  function handleBuyerChange(field: keyof BuyerInfo, value: string) {
-    setBuyer((s) => ({ ...s, [field]: value }));
-  }
-
-  const isFormValid =
-    buyer.name.trim().length > 0 &&
-    buyer.email.trim().length > 0 &&
-    buyer.email.includes("@") &&
-    buyer.cpf.replace(/\D/g, "").length >= 11 &&
-    cep.replace(/\D/g, "").length === 8 &&
-    number.trim().length > 0 &&
-    state.items.length > 0;
-
-  const subtotalUSD = state.items.reduce((s, item: CartItem) => s + item.product.price * item.quantity, 0);
-  const totalBRL = rate ? formatBRL(subtotalUSD, rate) : null;
+  const cpfDigits = buyerInfo.cpf.replace(/\D/g, '');
+  const isPaymentDisabled =
+    buyerInfo.name.trim() === '' ||
+    buyerInfo.email.trim() === '' ||
+    cep.trim() === '' ||
+    addressInfo === null ||
+    cpfDigits.length !== 11;
 
   return (
     <main className="checkout-page">
       <div className="checkout-page__hero">
         <h1>Checkout</h1>
         <p className="checkout-page__subtitle">
-          Preencha os dados do comprador e confirme o endereço para seguir para o pagamento.
+          Preencha os dados do comprador e confirme o endereco para seguir para o pagamento.
         </p>
       </div>
 
@@ -78,84 +77,49 @@ export default function CheckoutPage() {
         <section className="checkout-page__card" aria-labelledby="buyer-section-title">
           <div className="checkout-page__section-header">
             <h2 id="buyer-section-title">Dados do comprador</h2>
-            <p>Essas informações serão usadas para identificar a compra.</p>
+            <p>Essas informacoes serao usadas para identificar a compra.</p>
           </div>
-
-          <div className="checkout-page__buyer-form">
-            <input
-              placeholder="Nome"
-              value={buyer.name}
-              onChange={(e) => handleBuyerChange("name", e.target.value)}
-            />
-            <input
-              placeholder="E-mail"
-              value={buyer.email}
-              onChange={(e) => handleBuyerChange("email", e.target.value)}
-            />
-            <input
-              placeholder="CPF"
-              inputMode="numeric"
-              value={buyer.cpf}
-              onChange={(e) => handleBuyerChange("cpf", e.target.value.replace(/\D/g, ""))}
-            />
-          </div>
+          <BuyerForm
+            name={buyerInfo.name}
+            email={buyerInfo.email}
+            cpf={buyerInfo.cpf}
+            onChange={handleBuyerChange}
+          />
         </section>
 
         <section className="checkout-page__card" aria-labelledby="address-section-title">
           <div className="checkout-page__section-header">
-            <h2 id="address-section-title">Endereço de entrega</h2>
-            <p>Informe o CEP para preencher o endereço automaticamente.</p>
+            <h2 id="address-section-title">Endereco de entrega</h2>
+            <p>Informe o CEP para preencher o endereco automaticamente.</p>
           </div>
 
           <div className="checkout-page__cep-block">
             <span className="checkout-page__field-label">CEP</span>
-            <CepInput value={cep} onChange={setCep} onCepComplete={handleCepComplete} />
+            <CepInput
+              value={cep}
+              onChange={setCep}
+              onCepComplete={handleCepComplete}
+            />
           </div>
 
-          {cepLoading && <span>Buscando CEP...</span>}
-          {cepError && <span className="error">{cepError}</span>}
+          {cepLoading && <LoadingSpinner />}
+          {!cepLoading && cepError !== null && <ErrorMessage message={cepError} />}
 
           <div className="checkout-page__address">
             <AddressFields
               addressInfo={addressInfo}
               number={number}
               onNumberChange={setNumber}
-              numberRef={numberRef}
+              numberRef={numberInputRef}
             />
           </div>
-        </section>
-
-        <section className="checkout-page__card" aria-labelledby="summary-section-title">
-          <div className="checkout-page__section-header">
-            <h2 id="summary-section-title">Resumo do pedido</h2>
-          </div>
-
-          {state.items.length === 0 ? (
-            <p>Seu carrinho está vazio</p>
-          ) : (
-            <div>
-              {state.items.map((item: CartItem) => (
-                <div key={item.product.id} className="checkout-page__cart-item">
-                  <div>
-                    <strong>{item.product.title}</strong>
-                    <div>Quantidade: {item.quantity}</div>
-                  </div>
-                  <div>{item.product.price.toFixed(2)} USD</div>
-                </div>
-              ))}
-
-              <div className="checkout-page__subtotal">
-                <strong>Subtotal:</strong> {subtotalUSD.toFixed(2)} USD {rate ? `· ${totalBRL}` : ""}
-              </div>
-            </div>
-          )}
         </section>
 
         <div className="checkout-page__actions">
           <button
             className="checkout-page__button"
             type="button"
-            disabled={!isFormValid}
+            disabled={isPaymentDisabled}
             onClick={() => navigate('/pagamento')}
           >
             Ir para pagamento

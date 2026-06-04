@@ -1,34 +1,22 @@
-import { useState, useRef, useEffect } from "react";
-import { fetchAddressByCep } from "../services/cepService";
-import type { AddressInfo } from "../types/checkout.types";
+import { useState } from 'react';
+import { fetchAddressByCep as fetchCep } from '../services/cepService';
+import type { AddressInfo } from '../types/checkout.types';
 
 export function useCep() {
   const [address, setAddress] = useState<AddressInfo | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const mountedRef = useRef(true);
-
-  useEffect(() => {
-    mountedRef.current = true;
-    return () => {
-      mountedRef.current = false;
-    };
-  }, []);
 
   const fetchAddress = async (cep: string) => {
     setLoading(true);
     setError(null);
-
     try {
-      const addressInfo = await fetchAddressByCep(cep);
-      if (!mountedRef.current) return;
-      setAddress(addressInfo);
-    } catch (err: unknown) {
-      if (!mountedRef.current) return;
+      const data = await fetchCep(cep);
+      setAddress(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro ao buscar o CEP');
       setAddress(null);
-      setError(err instanceof Error ? err.message : "Erro ao buscar CEP");
     } finally {
-      if (!mountedRef.current) return;
       setLoading(false);
     }
   };
