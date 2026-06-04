@@ -43,7 +43,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
 
   switch (action.type) {
     case "ADD_ITEM": {
-      const { product } = action.payload;
+      const { product, quantity = 1 } = action.payload;
       const existingItem = state.items.find(
         (item) => item.product.id === product.id,
       );
@@ -52,10 +52,10 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         items: existingItem
           ? state.items.map((item) =>
               item.product.id === product.id
-                ? { ...item, quantity: item.quantity + 1 }
+                ? { ...item, quantity: item.quantity + quantity }
                 : item,
             )
-          : [...state.items, { product, quantity: 1 }],
+          : [...state.items, { product, quantity }], 
       };
       break;
     }
@@ -114,8 +114,8 @@ function cartReducer(state: CartState, action: CartAction): CartState {
 export function CartProvider({ children }: CartProviderProps) {
   const [state, dispatch] = useReducer(cartReducer, undefined, loadInitialState);
 
-  const addToCart = useCallback((product: Product) => {
-    dispatch({ type: "ADD_ITEM", payload: { product } });
+  const addToCart = useCallback((product: Product, quantity: number = 1) => {
+    dispatch({ type: "ADD_ITEM", payload: { product, quantity } });
   }, []);
 
   const decrementItem = useCallback((id: number) => {

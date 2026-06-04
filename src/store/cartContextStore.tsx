@@ -3,7 +3,7 @@ import type { CartItem, CartState } from "../types/cart.types";
 import type { Product } from "../types/product.types";
 
 export type CartAction =
-  | { type: "ADD_ITEM"; payload: { product: Product } }
+  | { type: "ADD_ITEM"; payload: { product: Product; quantity?: number } }
   | { type: "DECREMENT_ITEM"; payload: { id: CartItem["product"]["id"] } }
   | { type: "REMOVE_ITEM"; payload: { id: CartItem["product"]["id"] } }
   | { type: "UPDATE_QUANTITY"; payload: { id: CartItem["product"]["id"]; quantity: number } }
@@ -12,7 +12,7 @@ export type CartAction =
 export type CartContextValue = {
   state: CartState;
   dispatch: Dispatch<CartAction>;
-  addToCart: (product: Product) => void;
+  addToCart: (product: Product, quantity?: number) => void;
   decrementItem: (id: number) => void;
   removeFromCart: (productId: number) => void;
   updateQuantity: (productId: number, quantity: number) => void;
