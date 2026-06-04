@@ -1,0 +1,128 @@
+.cart-item-row {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 32px 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+.cart-item-row__image {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: var(--code-bg);
+  flex-shrink: 0;
+}
+
+.cart-item-row__info {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cart-item-row__title {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text-h);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.cart-item-row__unit-price {
+  font-size: 20px;
+  color: var(--text);
+  margin: 0;
+}
+
+.cart-item-row__quantity {
+  margin-top: 16px;  
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.cart-item-row__qty-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text-h);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.cart-item-row__qty-btn:hover {
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+}
+
+.cart-item-row__qty-value {
+  min-width: 24px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+.cart-item-row__total-price {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--accent);
+  min-width: 96px;
+  text-align: right;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.cart-item-row__remove-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.cart-item-row__remove-btn:hover {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+
+@media (max-width: 600px) {
+  .cart-item-row {
+    flex-wrap: wrap;
+  }
+
+  .cart-item-row__info {
+    flex: 1 1 calc(100% - 88px);
+  }
+
+  .cart-item-row__total-price {
+    margin-left: auto;
+  }
+}
+
+.cart-item-row__link {
+  text-decoration: none;
+  color: inherit;
+}

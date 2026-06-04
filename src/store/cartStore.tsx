@@ -13,6 +13,7 @@ const CART_STORAGE_KEY = "@DevMarket:cart";
 
 type CartAction =
   | { type: "ADD_ITEM"; payload: { product: Product } }
+  | { type: "DECREMENT_ITEM"; payload: { id: CartItem["product"]["id"] } }
   | { type: "REMOVE_ITEM"; payload: { id: CartItem["product"]["id"] } }
   | { type: "CLEAR_CART" };
 
@@ -79,6 +80,21 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       };
       break;
     }
+
+    case "DECREMENT_ITEM": {
+      const item = state.items.find((i) => i.product.id === action.payload.id);
+      if (!item) return state;
+
+      newState = item.quantity <= 1
+      ? { items: state.items.filter((i) => i.product.id !== action.payload.id) }
+      : { items: state.items.map((i) => i.product.id === action.payload.id
+          ? { ...i, quantity: i.quantity - 1 }
+          : i,
+        ),
+      };
+      break;
+    }
+
     case "REMOVE_ITEM":
       newState = {
         items: state.items.filter(
