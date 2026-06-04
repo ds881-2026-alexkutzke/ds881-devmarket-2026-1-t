@@ -7,7 +7,7 @@ type OrderSummaryProps = {
   rate: number;
 };
 
-const OrderSummary = ({ items, rate }: OrderSummaryProps) => {
+export default function OrderSummary({ items, rate }: OrderSummaryProps) {
   const total = items.reduce(
     (sum, item) => sum + item.product.price * item.quantity,
     0,
@@ -39,6 +39,5 @@ const OrderSummary = ({ items, rate }: OrderSummaryProps) => {
       </div>
     </section>
   );
-};
+}
 
-export default OrderSummary;
