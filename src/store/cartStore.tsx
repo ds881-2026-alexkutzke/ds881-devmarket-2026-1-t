@@ -89,6 +89,24 @@ function cartReducer(
       break;
     }
 
+    case "UPDATE_QUANTITY": {
+      const { id, quantity } = action.payload;
+      if (quantity <= 0) {
+        newState = {
+          items: state.items.filter((item) => item.product.id !== id),
+        };
+      } else {
+        newState = {
+          items: state.items.map((item) =>
+            item.product.id === id
+              ? { ...item, quantity }
+              : item,
+          ),
+        };
+      }
+      break;
+    }
+
     case "REMOVE_ITEM":
       newState = {
         items: state.items.filter(
@@ -164,6 +182,10 @@ export function CartProvider({
     },
     []
   );
+
+  const updateQuantity = useCallback((productId: number, quantity: number) => {
+    dispatch({ type: "UPDATE_QUANTITY", payload: { id: productId, quantity } });
+  }, []);
 
   return (
     <CartContext.Provider
