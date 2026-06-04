@@ -70,15 +70,18 @@ export default function ProductPage() {
   };
 
   const productDimensions = (product as any).dimensions;
+  const discount = product.discountPercentage || 0;
+  const hasDiscount = discount > 0;
+  const basePrice = product.price || 0;
+  const actualPrice = hasDiscount ? basePrice * (1 - discount / 100) : basePrice;
 
-  const renderPrice = () => {
-    if (exchangeRate !== null) return formatBRL(product.price, exchangeRate);
-    return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(product.price);
+  const formatPrice = (priceValue: number) => {
+    if (exchangeRate !== null) return formatBRL(priceValue, exchangeRate);
+    return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(priceValue);
   };
 
   return (
     <div className="product-page">
-      {/* Bloco Superior: Galeria e Compra */}
       <div className="product-page__content">
         <div className="product-page__image-section">
           <ProductGallery 
@@ -101,7 +104,15 @@ export default function ProductPage() {
           <p className="product-page__description">{product.description}</p>
 
           <div style={{ display: "flex", alignItems: "center", gap: "16px", margin: "8px 0" }}>
-            <div className="product-page__price">{renderPrice()}</div>
+            <div className="product-page__price-container">
+              {hasDiscount && (
+                <div className="product-page__price-original-wrapper">
+                  <span className="product-page__original-price">{formatPrice(basePrice)}</span>
+                  <span className="product-page__discount-badge">-{Math.round(discount)}%</span>
+                </div>
+              )}
+              <div className="product-page__price">{formatPrice(actualPrice)}</div>
+            </div>
             <StockBadge stock={product.stock} />
           </div>
 
@@ -123,7 +134,6 @@ export default function ProductPage() {
         </div>
       </div>
 
-      {/* SEÇÃO: Sobre o Produto (Especificações Técnicas) */}
       <div className="product-page__specs-section">
         <div className="product-page__specs-card">
           <h2 className="product-page__specs-title">Sobre o produto</h2>
@@ -158,11 +168,9 @@ export default function ProductPage() {
         </div>
       </div>
 
-      {/* SEÇÃO: Avaliações dos Clientes */}
       <div className="product-page__reviews-section">
         <h2 className="product-page__section-title">Avaliações</h2>
         
-        {/* Caixa de Média Geral */}
         <div className="product-page__reviews-summary">
           <span className="product-page__summary-score">{product.rating?.toFixed(1) || "0.0"}</span>
           <div className="product-page__summary-stars">
@@ -171,7 +179,6 @@ export default function ProductPage() {
           </div>
         </div>
 
-        {/* Lista de Comentários */}
         <div className="product-page__reviews-list">
           {(product as any).reviews && (product as any).reviews.length > 0 ? (
             (product as any).reviews.map((review: any, index: number) => (
