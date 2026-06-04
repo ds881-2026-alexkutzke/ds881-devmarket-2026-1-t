@@ -1,52 +1,42 @@
-import type { CartItem } from "../types/cart.types";
-import { useMemo } from "react";
+﻿import type { CartItem } from '../types/cart.types';
+import { formatBRL } from '../utils/formatCurrency';
+import './styles/OrderSummary.css';
 
-export default function OrderSummary({
-  items,
-  rate,
-}: {
+type OrderSummaryProps = {
   items: CartItem[];
-  rate: number | null;
-}) {
-  const totalUsd = useMemo(
-    () => items.reduce((acc, item) => acc + item.product.price * item.quantity, 0),
-    [items],
+  rate: number;
+};
+
+export default function OrderSummary({ items, rate }: OrderSummaryProps) {
+  const total = items.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0,
   );
 
   return (
-    <div className="order-summary">
+    <section className="order-summary" aria-label="Resumo do pedido">
       <h2 className="order-summary__title">Resumo do Pedido</h2>
-      {items.length === 0 ? (
-        <p>Seu carrinho está vazio.</p>
-      ) : (
-        <>
-          {items.map((item) => (
-            <div key={item.product.id} className="order-summary__item">
-              <div>
-                <div className="order-summary__item-name">{item.product.title}</div>
-                <div className="order-summary__label">
-                  {item.quantity} x ${item.product.price.toFixed(2)}
-                </div>
-              </div>
-              <div className="order-summary__value">
-                ${(item.product.price * item.quantity).toFixed(2)}
-              </div>
-            </div>
-          ))}
-          <div className="order-summary__totals">
-            <div className="order-summary__row">
-              <span className="order-summary__label">Total em USD</span>
-              <span className="order-summary__value">${totalUsd.toFixed(2)}</span>
-            </div>
-            <div className="order-summary__row">
-              <span className="order-summary__label">Taxa de câmbio</span>
-              <span className="order-summary__value">
-                {rate !== null ? rate.toFixed(4) : "Carregando..."}
+
+      <ul className="order-summary__list">
+        {items.map((item) => (
+          <li key={item.product.id} className="order-summary__item">
+            <div className="order-summary__item-info">
+              <span className="order-summary__item-name">{item.product.title}</span>
+              <span className="order-summary__item-qty">
+                {item.quantity}x {formatBRL(item.product.price, rate)}
               </span>
             </div>
-          </div>
-        </>
-      )}
-    </div>
+            <span className="order-summary__item-subtotal">
+              {formatBRL(item.product.price * item.quantity, rate)}
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      <div className="order-summary__total">
+        <span>Total</span>
+        <span>{formatBRL(total, rate)}</span>
+      </div>
+    </section>
   );
 }

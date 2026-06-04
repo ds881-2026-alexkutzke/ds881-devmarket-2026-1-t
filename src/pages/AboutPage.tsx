@@ -14,7 +14,10 @@ const tecnologias = [
 export default function AboutPage() {
   return (
     <div className="pagina-sobre">
-      <section className="pagina-sobre__destaque" aria-labelledby="about-title">
+      <section
+        className="pagina-sobre__destaque"
+        aria-labelledby="about-title"
+      >
         <p className="pagina-sobre__rotulo">Projeto acadêmico</p>
         <h1 id="about-title">Sobre o DevMarket</h1>
         <p className="pagina-sobre__introducao">
@@ -50,12 +53,33 @@ export default function AboutPage() {
 
       <section className="pagina-sobre__secao">
         <h2>Tecnologias utilizadas</h2>
-        <ul className="pagina-sobre__lista-tecnologias" aria-label="Tecnologias utilizadas">
+        <ul
+          className="pagina-sobre__lista-tecnologias"
+          aria-label="Tecnologias utilizadas"
+        >
           {tecnologias.map((tecnologia) => (
             <li className="pagina-sobre__item-tecnologia" key={tecnologia}>
               {tecnologia}
             </li>
           ))}
+        </ul>
+      </section>
+
+      <section className="pagina-sobre__secao">
+        <h2>Contato</h2>
+        <p>E-mail para contato: devmarket.ufpr@gmail.com</p>
+      </section>
+
+      <section className="pagina-sobre__secao">
+        <h2>Créditos</h2>
+        <p>
+          Projeto desenvolvido colaborativamente pelos alunos da disciplina
+          DS881 - DevOps da Universidade Federal do Paraná (UFPR).
+        </p>
+
+        <ul className="pagina-sobre__lista-tecnologias">
+          <li>Gabriela Harres</li>
+          <li>Equipe DevMarket</li>
         </ul>
       </section>
     </div>

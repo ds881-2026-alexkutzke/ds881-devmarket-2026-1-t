@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useCart } from "../store/cartStore";
+import { useCart } from "../hooks/useCart";
 import { useExchangeRate } from "../hooks/useExchangeRate";
 import { generatePixPayload } from "../utils/pixGenerator";
 import CartSummary from "../components/CartSummary";
@@ -30,7 +30,11 @@ export default function PaymentPage() {
         )}
         <div className="payment-page__grid">
           <div>
-            <OrderSummary items={state.items} rate={rate} />
+            {rate !== null ? (
+              <OrderSummary items={state.items} rate={rate} />
+            ) : (
+              <p>Carregando resumo do pedido...</p>
+            )}
             <CartSummary items={state.items} rate={rate} />
           </div>
           <div className="pix-payment">
