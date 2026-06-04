@@ -12,7 +12,7 @@ export const useProducts = () => {
       try {
         const data = await fetchProducts();
         setProducts(data);
-      } catch (e) {
+      } catch{
         setProducts([]);
         setHasFetchFailed(true);
         return;
