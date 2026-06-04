@@ -35,6 +35,8 @@ jobs:
               core.setFailed("Erro: Você esqueceu de vincular a issue! Adicione 'Closes #numero_da_issue' na descrição do seu PR.");
             } else if (!hasTemplate) {
               core.setFailed("Erro: O template do PR não foi utilizado corretamente. Certifique-se de manter as seções 'Descrição', 'O que foi feito' e 'Checklist'.");
+            } else if (/descreva o que você fez\.|descreva o que voce fez\./i.test(body)) {
+              core.setFailed("Erro: A seção 'O que foi feito' ainda contém o texto padrão do template. Substitua por uma descrição real do que foi implementado.");
             } else {
               console.log("Descrição validada com sucesso: possui tamanho adequado, vincula uma issue e utiliza o template.");
             }
