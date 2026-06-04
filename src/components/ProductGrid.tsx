@@ -13,8 +13,8 @@ export default function ProductGrid({ products }: ProductGridProps) {
         ? products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))
-        : <p className="product-grid__empty">Nenhum produto disponível no momento.</p>
+        : <p className="product-grid_empty">Nenhum produto disponível no momento.</p>
       }
-    </div>
+      </div>
   );
 }
