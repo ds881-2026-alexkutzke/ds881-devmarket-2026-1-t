@@ -6,10 +6,10 @@ type Props = {
     addressInfo: AddressInfo | null
     number: string
     onNumberChange: (value: string) => void
-    numberInputRef?: RefObject<HTMLInputElement | null>
+    numberRef?: RefObject<HTMLInputElement | null>
 }
 
-export default function AddressFields({ addressInfo, number, onNumberChange, numberInputRef }: Props) {
+export default function AddressFields({ addressInfo, number, onNumberChange, numberRef }: Props) {
   return (
     <div className="container">
       <div>
@@ -63,7 +63,7 @@ export default function AddressFields({ addressInfo, number, onNumberChange, num
       <div>
         <label htmlFor="number">Número</label>
         <input
-          ref={numberInputRef}
+          ref={numberRef}
           type="text"
           id="number"
           value={number}

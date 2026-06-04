@@ -1,7 +1,10 @@
-.checkout-page { padding: 16px; }
-.checkout-section { display: grid; gap: 12px; max-width: 900px; }
-.buyer-form { display: flex; gap: 8px; flex-wrap: wrap; }
-.cep-row { display: flex; gap: 8px; align-items: center; }
-.cart-item { display: flex; justify-content: space-between; }
-.subtotal { margin-top: 8px; }
-.error { color: red; }
+.checkout-page { padding: 24px; }
+.checkout-page__section { display: grid; gap: 24px; max-width: 960px; margin: 0 auto; }
+.checkout-page__card { background: #fff; border-radius: 12px; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08); padding: 20px; }
+.checkout-page__buyer-form { display: flex; gap: 12px; flex-wrap: wrap; }
+.checkout-page__buyer-form input { flex: 1 1 220px; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; }
+.checkout-page__cep-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+.checkout-page__cart-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e5e7eb; }
+.checkout-page__cart-item:last-child { border-bottom: none; }
+.checkout-page__subtotal { margin-top: 16px; font-weight: 600; }
+.error { color: #b91c1c; }

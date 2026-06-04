@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import type { CartItem } from "../types/cart.types";
 import CepInput from "../components/CepInput";
 import AddressFields from "../components/AddressFields";
 import { useCep } from "../hooks/useCep";
@@ -15,7 +16,7 @@ export default function CheckoutPage() {
 
   const [cep, setCep] = useState("");
   const [number, setNumber] = useState("");
-  const numberInputRef = useRef<HTMLInputElement | null>(null);
+  const numberRef = useRef<HTMLInputElement | null>(null);
 
   const { address: addressInfo, loading: cepLoading, error: cepError, fetchAddress } = useCep();
 
@@ -42,8 +43,8 @@ export default function CheckoutPage() {
     setCep(foundCep);
     await fetchAddress(foundCep);
 
-    if (numberInputRef.current) {
-      numberInputRef.current.focus();
+    if (numberRef.current) {
+      numberRef.current.focus();
     }
   }
 
@@ -60,17 +61,17 @@ export default function CheckoutPage() {
     number.trim().length > 0 &&
     state.items.length > 0;
 
-  const subtotalUSD = state.items.reduce((s, item) => s + item.product.price * item.quantity, 0);
+  const subtotalUSD = state.items.reduce((s, item: CartItem) => s + item.product.price * item.quantity, 0);
   const totalBRL = rate ? formatBRL(subtotalUSD, rate) : null;
 
   return (
     <main className="checkout-page">
       <h1>Checkout</h1>
 
-      <section className="checkout-section">
-        <div>
+      <section className="checkout-page__section">
+        <div className="checkout-page__card">
           <h2>Dados do comprador</h2>
-          <div className="buyer-form">
+          <div className="checkout-page__buyer-form">
             <input
               placeholder="Nome"
               value={buyer.name}
@@ -90,9 +91,9 @@ export default function CheckoutPage() {
           </div>
         </div>
 
-        <div>
+        <div className="checkout-page__card">
           <h2>Endereço</h2>
-          <div className="cep-row">
+          <div className="checkout-page__cep-row">
             <CepInput value={cep} onChange={setCep} onCepComplete={handleCepComplete} />
             {cepLoading && <span>Buscando CEP...</span>}
             {cepError && <span className="error">{cepError}</span>}
@@ -102,16 +103,16 @@ export default function CheckoutPage() {
             addressInfo={addressInfo}
             number={number}
             onNumberChange={setNumber}
-            numberInputRef={numberInputRef}
+            numberRef={numberRef}
           />
         </div>
 
-        <div>
+        <div className="checkout-page__card">
           <h2>Resumo do pedido</h2>
           <div>
             {state.items.length === 0 && <p>Seu carrinho está vazio</p>}
-            {state.items.map((item) => (
-              <div key={item.product.id} className="cart-item">
+            {state.items.map((item: CartItem) => (
+              <div key={item.product.id} className="checkout-page__cart-item">
                 <div>
                   <strong>{item.product.title}</strong>
                   <div>Quantidade: {item.quantity}</div>
@@ -120,14 +121,14 @@ export default function CheckoutPage() {
               </div>
             ))}
 
-            <div className="subtotal">
+            <div className="checkout-page__subtotal">
               <strong>Subtotal:</strong> {subtotalUSD.toFixed(2)} USD {rate ? `· ${totalBRL}` : ""}
             </div>
           </div>
         </div>
 
         <div>
-          {/* <button disabled={!isFormValid}>Confirmar pedido</button> */}
+          <button disabled={!isFormValid}>Confirmar pedido</button>
         </div>
       </section>
     </main>
