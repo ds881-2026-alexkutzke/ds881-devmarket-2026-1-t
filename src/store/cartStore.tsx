@@ -1,5 +1,5 @@
 import { useCallback, useReducer, type ReactNode } from "react";
-import { CartContext } from "./cartContext";
+import { CartContext } from "./cartContextStore";
 import type { CartState } from "../types/cart.types";
 import type { Product } from "../types/product.types";
 
